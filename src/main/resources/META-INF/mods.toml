@@ -1,0 +1,37 @@
+modLoader="javafml"
+loaderVersion="[36,)" 
+license="All rights reserved"
+#issueTrackerURL="https://change.me.to.your.issue.tracker.example.invalid/" #optional
+
+[[mods]]
+modId="dicemcpmmonbt"
+version="${file.jarVersion}"
+displayName="PMMO and NBT Compat Mod"
+#displayURL="https://change.me.to.your.mods.homepage.example.invalid/" #optional
+#logoFile="examplemod.png" #optional
+credits="Thanks to Harmonized for making PMMO and assisting me with the compat" #optional
+authors="Caltinor" #optional
+description='''
+A compatibility mod for PMMO that allows for the assignment of skill requirements based on NBT data of an Itemstack
+'''
+
+[[dependencies.examplemod]] #optional
+    modId="forge"
+    mandatory=true
+    versionRange="[36,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.examplemod]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.16.5,1.17)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.pmmo]]
+	modId="pmmo"
+	mandatory=true
+	versionRange="[1.16.5-3.52.2,1.17)"
+	ordering="NONE"
+	side="BOTH"

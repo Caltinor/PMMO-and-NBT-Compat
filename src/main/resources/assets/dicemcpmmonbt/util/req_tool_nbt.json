@@ -1,0 +1,63 @@
+{
+	"tconstruct:pickaxe": {
+		"summative": true,
+		"values": [
+			{
+				"type": "list",
+				"key": "tic_materials",
+				"index": 0,
+				"sub_reference": {
+					"type": "id",
+					"key": "tconstruct:wood",
+					"predicate":
+					{
+						"operator": "EXISTS"
+					},
+					"value": { "mining": 2, "smithing": 5 }
+				}
+			},
+			{
+				"type": "list",
+				"key": "tic_materials",
+				"index": 0,
+				"sub_reference": {
+					"type": "id",
+					"key": "tconstruct:stone",
+					"predicate":
+					{
+						"operator": "EXISTS"
+					},
+					"value": { "mining": 8, "smithing": 5 }
+				}
+			},
+			{
+				"type": "list",
+				"key": "tic_materials",
+				"index": 1,
+				"sub_reference": {
+					"type": "id",
+					"key": "tconstruct:stone",
+					"predicate":
+					{
+						"operator": "EXISTS"
+					},
+					"value": { "mining": 10, "smithing": 3 }
+				}
+			},
+			{
+				"type": "list",
+				"key": "tic_materials",
+				"index": 0,
+				"sub_reference": {
+					"type": "id",
+					"key": "tconstruct:iron",
+					"predicate":
+					{
+						"operator": "EXISTS"
+					},
+					"value": { "mining": 30, "smithing": 7 }
+				}
+			}
+		]	
+	}
+}
