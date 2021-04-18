@@ -20,8 +20,24 @@ public class Result {
 	public String comparator, comparison;
 	public Map<String, Double> values = new HashMap<>();
 	
-	public Result(JsonObject obj, String comparison) {
+	public Result(String key, String operator, String comparator, JsonObject values, String comparison) {
+		res = key;
+		this.comparison = comparison;
+		for (int i = 0; i < Operator.values().length; i++) {
+			if (Operator.values()[i].toString().equalsIgnoreCase(operator)) {
+				this.operator = Operator.values()[i];
+				break;
+			}
+		}
+		values.entrySet().forEach((e) -> {
+			this.values.put(e.getKey(), e.getValue().getAsDouble());
+		});
+		this.comparator = comparator;
+	}
+	
+	/*public Result(JsonObject obj, String comparison) {
 		res = obj.get("key").getAsString();
+		//TODO convert predicate to an array and return multiple evaluations
 		String op = obj.get("predicate").getAsJsonObject().get("operator").getAsString();
 		for (int i = 0; i < Operator.values().length; i++) {
 			if (Operator.values()[i].toString().equalsIgnoreCase(op)) {
@@ -37,7 +53,7 @@ public class Result {
 			values.put(e.getKey(), e.getValue().getAsDouble());
 		});
 		this.comparison = comparison;
-	}
+	}*/
 	
 	public boolean compares() {
 		switch (operator) {

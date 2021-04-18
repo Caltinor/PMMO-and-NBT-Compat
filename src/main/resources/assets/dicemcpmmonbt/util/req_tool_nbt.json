@@ -1,63 +1,48 @@
 {
-	"tconstruct:pickaxe": {
-		"summative": true,
+	"examplemod:exampleitem": {
+		"summative": false,
 		"values": [
 			{
-				"type": "list",
-				"key": "tic_materials",
-				"index": 0,
-				"sub_reference": {
-					"type": "id",
-					"key": "tconstruct:wood",
-					"predicate":
+				"type": "id",
+				"keys": ["nbt_key"],
+				"predicates": [
 					{
-						"operator": "EXISTS"
-					},
-					"value": { "mining": 2, "smithing": 5 }
-				}
+						"operator": "EQUALS", 
+						"comparator": 0,
+						"value": { "mining": 10, "smithing": 5 }
+					}
+				]				
+			},
+			{
+				"type": "compound",
+				"keys": ["compound_key"],
+				"sub_references": [{
+					"type": "id",
+					"key": "nbt_key",
+					"predicates": [
+						{
+							"operator": "GREATER_THAN", 
+							"comparator": 9,
+							"value": { "mining": 10, "smithing": 5 }
+						}
+					]
+				}]
 			},
 			{
 				"type": "list",
-				"key": "tic_materials",
+				"keys": ["list_key"],
 				"index": 0,
-				"sub_reference": {
+				"sub_references": [{
 					"type": "id",
-					"key": "tconstruct:stone",
-					"predicate":
-					{
-						"operator": "EXISTS"
-					},
-					"value": { "mining": 8, "smithing": 5 }
-				}
-			},
-			{
-				"type": "list",
-				"key": "tic_materials",
-				"index": 1,
-				"sub_reference": {
-					"type": "id",
-					"key": "tconstruct:stone",
-					"predicate":
-					{
-						"operator": "EXISTS"
-					},
-					"value": { "mining": 10, "smithing": 3 }
-				}
-			},
-			{
-				"type": "list",
-				"key": "tic_materials",
-				"index": 0,
-				"sub_reference": {
-					"type": "id",
-					"key": "tconstruct:iron",
-					"predicate":
-					{
-						"operator": "EXISTS"
-					},
-					"value": { "mining": 30, "smithing": 7 }
-				}
-			}
-		]	
+					"key": "subobject_key_or_item_value",
+					"predicates": [
+						{
+							"operator": "EXISTS",
+							"value": { "mining": 10, "smithing": 5 }
+						}
+					]
+				}]
+			}	
+		]
 	}
 }
