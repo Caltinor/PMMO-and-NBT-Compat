@@ -36,20 +36,16 @@ public class EvaluationHandler {
 		for (int k = 0; k < keyArr.size(); k++) {
 			String key = keyArr.get(k).getAsString();
 			if (type.equalsIgnoreCase("id") && nbt.contains(key)) {
-				JsonArray keys = obj.get("keys").getAsJsonArray();
-				for (int s = 0; s < keys.size(); s++) {
-					String keyEntry = keys.get(s).getAsString();
-					String nbtValue = nbt.getString(key);
-					JsonArray predicates = obj.get("predicates").getAsJsonArray();
-					for (int i = 0; i < predicates.size(); i++) {
-						JsonObject pred = predicates.get(i).getAsJsonObject();
-						String operator = pred.get("operator").getAsString();
-						JsonObject values = pred.get("value").getAsJsonObject();
-						String comparator = "";
-						if (!operator.equalsIgnoreCase("EXISTS"))
-							comparator = pred.get("comparator").getAsString();
-						list.add(new Result(keyEntry, operator, comparator, values, nbtValue));
-					}
+				String nbtValue = nbt.get(key).getAsString();
+				JsonArray predicates = obj.get("predicates").getAsJsonArray();
+				for (int i = 0; i < predicates.size(); i++) {
+					JsonObject pred = predicates.get(i).getAsJsonObject();
+					String operator = pred.get("operator").getAsString();
+					JsonObject values = pred.get("value").getAsJsonObject();
+					String comparator = "";
+					if (!operator.equalsIgnoreCase("EXISTS"))
+						comparator = pred.get("comparator").getAsString();
+					list.add(new Result(key, operator, comparator, values, nbtValue));
 				}
 			}
 			//if the type is a compound, go one step deeper with recursion
@@ -90,7 +86,7 @@ public class EvaluationHandler {
 							JsonArray keys = subRef.get("keys").getAsJsonArray();
 							for (int sk = 0; sk < keys.size(); sk++) {
 								String keyEntry = keys.get(sk).getAsString();
-								String nbtValue = lnbt.getString(i);
+								String nbtValue = lnbt.get(i).getAsString();
 								JsonArray predicates = subRef.get("predicates").getAsJsonArray();
 								for (int j = 0; j < predicates.size(); j++) {
 									JsonObject pred = predicates.get(j).getAsJsonObject();
@@ -114,7 +110,7 @@ public class EvaluationHandler {
 						JsonArray keys = subRef.get("keys").getAsJsonArray();
 						for (int sk = 0; sk < keys.size(); sk++) {
 							String keyEntry = keys.get(sk).getAsString();
-							String nbtValue = lnbt.getString(index);
+							String nbtValue = lnbt.get(index).getAsString();
 							JsonArray predicates = subRef.get("predicates").getAsJsonArray();
 							for (int j = 0; j < predicates.size(); j++) {
 								JsonObject pred = predicates.get(j).getAsJsonObject();
