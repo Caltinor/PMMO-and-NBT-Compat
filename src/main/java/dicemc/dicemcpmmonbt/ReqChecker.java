@@ -63,7 +63,7 @@ public class ReqChecker {
 	}
 	
 	public static Map<String, Double> getNBTReqs(JType jType, ItemStack stack) {
-		CompoundNBT nbt = stack.getOrCreateTag();
+		CompoundNBT nbt = stack.getTag();
 		JsonObject ref = src.get(jType).getOrDefault(stack.getItem().getRegistryName(), new JsonObject());
 		if (jType.equals(JType.REQ_BREAK) && ref.get("item") != null) 
 			ref = ref.get("item").getAsJsonObject();	
