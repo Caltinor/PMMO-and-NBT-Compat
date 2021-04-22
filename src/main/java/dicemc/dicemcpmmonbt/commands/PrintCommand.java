@@ -45,7 +45,8 @@ public class PrintCommand implements Command<CommandSource>{
 			if (ertr == null && te == null)
 				player.sendMessage(new StringTextComponent("No NBT exists in the entity or block traced."), player.getUUID());
 		}
-		String nbt = player.getMainHandItem().getOrCreateTag().toString();
+		String nbt = player.getMainHandItem().getTag().toString();
+		if (nbt == null) nbt = "{}";
 		player.sendMessage(new StringTextComponent(nbt), player.getUUID());
 		return 0;
 	}

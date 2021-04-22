@@ -51,7 +51,7 @@ public class ReqChecker {
 		if (!src.get(jType).containsKey(tile.getBlockState().getBlock().getRegistryName())) return true;
 		
 		//core logic
-		CompoundNBT tag = tile.getTileData();
+		CompoundNBT tag = tile.serializeNBT();
 		if (tag == null) return true;
 		//XP check returns false if any criteria do not meet, otherwise proceeds to true return
 		for (Map.Entry<String, Double> vals : getNBTReqs(jType, tile).entrySet()) {
@@ -63,16 +63,15 @@ public class ReqChecker {
 	}
 	
 	public static Map<String, Double> getNBTReqs(JType jType, ItemStack stack) {
+		Map<String, Double> map = new HashMap<>();
 		CompoundNBT nbt = stack.getTag();
+		if (nbt == null) return map;
 		JsonObject ref = src.get(jType).getOrDefault(stack.getItem().getRegistryName(), new JsonObject());
 		if (jType.equals(JType.REQ_BREAK) && ref.get("item") != null) 
-			ref = ref.get("item").getAsJsonObject();	
-		Map<String, Double> map = new HashMap<>();
-		if (ref.get("values") == null)
-			return map;
+			ref = ref.get("item").getAsJsonObject();		
+		if (ref.get("values") == null) return map;
 		JsonArray values = ref.get("values").getAsJsonArray();		
-		if (ref.get("summative") == null)
-			return map;
+		if (ref.get("summative") == null) return map;
 		boolean isSummative = ref.get("summative").getAsBoolean();
 		List<Result> data = EvaluationHandler.evaluateEntries(values, nbt);
 		for (Result r : data) {
@@ -118,7 +117,7 @@ public class ReqChecker {
 		for (Map.Entry<JType, Map<ResourceLocation, JsonObject>> s : src.entrySet()) {
 			LOG.info("JType="+s.getKey().toString());
 			for (Map.Entry<ResourceLocation, JsonObject> i : s.getValue().entrySet()) {
-				LOG.info("   "+i.getKey().toString()+":"+i.getValue().toString());
+				LOG.info("   "+i.getKey().toString()+":"+i.getValue().toString().substring(0, i.getValue().toString().length() > 2000 ? 2000 : i.getValue().toString().length()));
 			}
 		}
 	}
