@@ -37,7 +37,7 @@ public class JsonParser {
             if (!file.exists()) continue;
             
             try(InputStream input = new FileInputStream(file.getPath());
-                Reader reader = new BufferedReader(new InputStreamReader(input))) 
+                Reader reader = new BufferedReader(new InputStreamReader(input), 1000000)) 
             {
             	Map<String, JsonObject> rootMap = gson.fromJson(reader, baseType);
             	for (Map.Entry<String, JsonObject> entry : rootMap.entrySet()) {
