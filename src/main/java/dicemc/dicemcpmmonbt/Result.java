@@ -38,7 +38,6 @@ public class Result {
 	public boolean compares() {
 		switch (operator) {
 		case EQUALS: {
-			System.out.println(comparator+":"+comparison);
 			return comparator.equals(comparison);
 		}
 		case GREATER_THAN: {

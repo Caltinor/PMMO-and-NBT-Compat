@@ -28,10 +28,8 @@ public class PacketSync {
 			for (int j = 0; j < l; j++) {
 				int clen = buf.readInt();
 				ResourceLocation res = new ResourceLocation(buf.readCharSequence(clen, Charset.defaultCharset()).toString());
-				System.out.println(res.toString());
 				clen = buf.readInt();
 				JsonObject obj = gson.fromJson(buf.readCharSequence(clen, Charset.defaultCharset()).toString(), JsonObject.class);
-				System.out.println(obj.toString());
 				valMap.put(res, obj);
 			}
 			src.put(type, valMap);
