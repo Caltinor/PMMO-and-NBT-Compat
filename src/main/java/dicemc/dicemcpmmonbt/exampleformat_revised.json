@@ -1,0 +1,46 @@
+{
+	"global": {
+		"paths": {
+		
+		},
+		"constants": {
+		
+		}
+	},
+	"minecraft:item": {
+		"logic": [
+			{
+				"behavior_to_previous": "ADD_TO",
+				"should_cases_add": true,
+				"cases": {
+					"#default":  {"skill": 10, "otherskill": 15},
+					"#enchantment_name=#smite": { "skill": 10, "otherskill": 15}
+				}	
+			},
+			{
+				"behavior_to_previous": "HIGHEST",
+				"should_cases_add": false,
+				"cases": {
+					"#damage_value>#2":  {"skill": 10, "otherskill": 15},
+					"#enchantment_name=#smite": { "skill": 10, "otherskill": 15}
+				}	
+			},
+			{
+				"behavior_to_previous": "REPLACE",
+				"should_cases_add": true,
+				"cases": {
+					"#damage_value>#2":  {"skill": 10, "otherskill": 15},
+					"#enchantment_name=#smite": { "skill": 10, "otherskill": 15}
+				}	
+			}
+		],
+		"paths": {
+			"damage_value": "tag.Items[].damage",
+			"enchantment_name": "tag.Enchantments[].name"
+		},
+		"constants":{
+			"enchant_level": 3,
+			"smite": "minecraft:smite"
+		}
+	}
+}
