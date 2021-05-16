@@ -1,5 +1,6 @@
 package dicemc.dicemcpmmonbt;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -29,7 +30,6 @@ import harmonised.pmmo.ProjectMMOMod;
 import harmonised.pmmo.api.PredicateRegistry;
 import harmonised.pmmo.api.TooltipSupplier;
 import harmonised.pmmo.config.JType;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -61,6 +61,28 @@ public class PMMONBT
     	Networking.registerMessages();
     	registerLogic();
     }
+    
+    /*@SubscribeEvent
+    public void printEntity(EntityInteract event) {
+    	event.getPlayer().sendMessage(new StringTextComponent(event.getTarget().getType().getRegistryName().toString()), event.getPlayer().getUUID());
+    	event.getPlayer().sendMessage(new StringTextComponent(event.getTarget().serializeNBT().toString()), event.getPlayer().getUUID());
+    	System.out.println(TooltipSupplier.tooltipExists(event.getTarget().getType().getRegistryName(), JType.XP_VALUE_KILL));
+    }
+    
+    @SubscribeEvent
+    public void printblock(PlayerInteractEvent.RightClickBlock event) {
+    	if (event.getWorld().getBlockEntity(event.getPos()) == null) return;
+    	event.getPlayer().sendMessage(new StringTextComponent("PMMO output"), event.getPlayer().getUUID());
+    	Map<String, Double> output = XP.getXp(event.getWorld().getBlockEntity(event.getPos()), JType.XP_VALUE_BREAK);
+    	for (Map.Entry<String, Double> map : output.entrySet()) {
+    		event.getPlayer().sendMessage(new StringTextComponent(map.getKey()+":"+map.getValue()), event.getPlayer().getUUID());
+    	}
+    	event.getPlayer().sendMessage(new StringTextComponent("NBT output"), event.getPlayer().getUUID());
+    	output = ReqChecker.getNBTReqs(JType.XP_VALUE_BREAK, event.getWorld().getBlockEntity(event.getPos()));
+    	for (Map.Entry<String, Double> map : output.entrySet()) {
+    		event.getPlayer().sendMessage(new StringTextComponent(map.getKey()+":"+map.getValue()), event.getPlayer().getUUID());
+    	}
+    }*/
 
     @SubscribeEvent
     public void onCommandRegister(RegisterCommandsEvent event) {
@@ -79,15 +101,38 @@ public class PMMONBT
     	for (Map.Entry<JType, Map<ResourceLocation, JsonObject>> base : ReqChecker.src.entrySet()) {
     		JType jType = base.getKey();
     		for (Map.Entry<ResourceLocation, JsonObject> map : base.getValue().entrySet()) {
-    			Predicate<PlayerEntity> pred = player -> (ReqChecker.checkNBTReq(player, map.getKey(), jType));
-    			PredicateRegistry.registerPredicate(map.getKey(), jType, pred);
-    			Function<ItemStack, Map<String, Double>> func = stack -> (ReqChecker.getNBTReqs(jType, stack));
-    			TooltipSupplier.registerTooltipData(map.getKey(), jType, func);
+    			if (jType.equals(JType.REQ_WEAR) || jType.equals(JType.REQ_TOOL) || jType.equals(JType.REQ_WEAPON) ||
+    					jType.equals(JType.REQ_USE) || jType.equals(JType.REQ_PLACE) || jType.equals(JType.REQ_BIOME) ||
+    					jType.equals(JType.REQ_KILL) || jType.equals(JType.REQ_CRAFT)) {
+	    			Predicate<PlayerEntity> pred = player -> (ReqChecker.checkNBTReq(player, map.getKey(), jType));
+	    			PredicateRegistry.registerPredicate(map.getKey(), jType, pred);
+	    			Function<ItemStack, Map<String, Double>> func = stack -> (ReqChecker.getNBTReqs(jType, stack));
+	    			TooltipSupplier.registerTooltipData(map.getKey(), jType, func);
+    			}
+    			//BREAK TE OBJECT
     			if (jType.equals(JType.REQ_BREAK)) {
     				BiPredicate<PlayerEntity, TileEntity> pred2 = (player, tile) -> (ReqChecker.checkNBTReq(player, tile, jType));
     				PredicateRegistry.registerBreakPredicate(map.getKey(), jType, pred2);
     				Function<TileEntity, Map<String, Double>> func2 = tile -> (ReqChecker.getNBTReqs(jType, tile));
         			TooltipSupplier.registerBreakTooltipData(map.getKey(), jType, func2);
+    			}
+    			//ITEMSTACK OBJECTS
+    			if (jType.equals(JType.XP_VALUE_GENERAL) || jType.equals(JType.XP_VALUE_CRAFT) || 
+    					jType.equals(JType.XP_VALUE_CRAFT) || jType.equals(JType.XP_VALUE_SMELT) ||
+    					jType.equals(JType.XP_VALUE_COOK) || jType.equals(JType.XP_VALUE_BREW)) {
+    				Function<ItemStack, Map<String, Double>> func = stack -> (ReqChecker.getNBTReqs(jType, stack));
+	    			TooltipSupplier.registerTooltipData(map.getKey(), jType, func);
+    			}   
+    			//BLOCK/TE OJECTS
+    			if (jType.equals(JType.XP_VALUE_BREAK)) {
+    				Function<TileEntity, Map<String, Double>> func2 = tile -> (ReqChecker.getNBTReqs(jType, tile));
+        			TooltipSupplier.registerBreakTooltipData(map.getKey(), jType, func2);
+    			}
+    			//ENTITY OBJECTS
+    			if (jType.equals(JType.XP_VALUE_BREED) || jType.equals(JType.XP_VALUE_TAME) ||
+    					jType.equals(JType.XP_VALUE_KILL)) {
+    				Function<Entity, Map<String, Double>> func3 = entity -> ReqChecker.getNBTReqs(jType, entity);
+    				TooltipSupplier.registerEntityTooltipData(map.getKey(), jType, func3);
     			}
     		}
     	}
@@ -95,8 +140,9 @@ public class PMMONBT
     
     private void initData() {
     	String fileName;
-    	for (int i = JType.REQ_WEAR.getValue(); i <= JType.REQ_CRAFT.getValue(); i++) {
-    		if (i == JType.REQ_USE_ENCHANTMENT.getValue()) continue;
+    	for (int i = JType.REQ_WEAR.getValue(); i < JType.XP_VALUE_GROW.getValue(); i++) {
+    		if (i == JType.REQ_USE_ENCHANTMENT.getValue() || i == JType.XP_VALUE_TRIGGER.getValue()) 
+    			continue;
     		fileName = JType.values()[i].name().toLowerCase() + "_nbt.json";
     		File dataFile = FMLPaths.CONFIGDIR.get().resolve( "pmmo/" + fileName ).toFile();
     		if (!dataFile.exists())

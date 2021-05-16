@@ -15,6 +15,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 public class PrintCommand implements Command<CommandSource>{
 	private static final PrintCommand CMD = new PrintCommand();
@@ -25,6 +26,7 @@ public class PrintCommand implements Command<CommandSource>{
 
 	@Override
 	public int run(CommandContext<CommandSource> context) throws CommandSyntaxException {
+		//TODO improve entity tracing
 		ServerPlayerEntity player = context.getSource().getPlayerOrException();
 		if (player.getMainHandItem().isEmpty()) {
 			BlockRayTraceResult brtr = (BlockRayTraceResult) player.pick(10, 0f , false);
@@ -38,12 +40,12 @@ public class PrintCommand implements Command<CommandSource>{
 			TileEntity te = context.getSource().getEntityOrException().getCommandSenderWorld().getBlockEntity(brtr.getBlockPos());
 			if (te != null) {
 				CompoundNBT nbt = te.serializeNBT();
-				player.sendMessage(new StringTextComponent(te.getBlockState().getBlock().getRegistryName().toString()+" Tag:"+nbt.toString()), player.getUUID());
+				player.sendMessage(new StringTextComponent(te.getBlockState().getBlock().getRegistryName().toString()+" NBT="+nbt.toString()), player.getUUID());
 			}
 			if (ertr != null)
-				player.sendMessage(new StringTextComponent(ertr.getEntity().getEncodeId()+" Tag:"+ertr.getEntity().getTags().toString()), player.getUUID());
+				player.sendMessage(new StringTextComponent(ertr.getEntity().getEncodeId()+" NBT="+ertr.getEntity().getTags().toString()), player.getUUID());
 			if (ertr == null && te == null)
-				player.sendMessage(new StringTextComponent("No NBT exists in the entity or block traced."), player.getUUID());
+				player.sendMessage(new TranslationTextComponent("pmmonbt.commands.print.error"), player.getUUID());
 		}
 		String nbt = player.getMainHandItem().getTag().toString();
 		if (nbt == null) nbt = "{}";

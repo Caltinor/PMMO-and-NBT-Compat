@@ -12,6 +12,7 @@ import com.google.gson.JsonObject;
 import dicemc.dicemcpmmonbt.readers.EvaluationHandler;
 import harmonised.pmmo.config.JType;
 import harmonised.pmmo.skills.Skill;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -113,11 +114,36 @@ public class ReqChecker {
 		return map;
 	}
 	
+	public static Map<String, Double> getNBTReqs(JType jType, Entity entity) {
+		CompoundNBT nbt = entity.serializeNBT();
+		JsonObject ref = src.get(jType).getOrDefault(entity.getType().getRegistryName(), new JsonObject());
+		Map<String, Double> map = new HashMap<>();
+		if (ref.get("values") == null)
+			return map;
+		JsonArray values = ref.get("values").getAsJsonArray();		
+		if (ref.get("summative") == null)
+			return map;
+		boolean isSummative = ref.get("summative").getAsBoolean();
+		List<Result> data = EvaluationHandler.evaluateEntries(values, nbt);
+		for (Result r : data) {
+			if (r == null) continue;
+			if (!r.compares()) continue;
+			Map<String, Double> value = r.values;					
+			for (Map.Entry<String, Double> val : value.entrySet()) {
+				map.merge(val.getKey(), val.getValue(), (in1, in2) -> {
+					return isSummative ? (in1 + in2)
+							: (in1 > in2 ? in1 : in2);});
+			}
+		}
+		return map;
+	}
+	
 	public static void printSrc(Logger LOG) {
 		for (Map.Entry<JType, Map<ResourceLocation, JsonObject>> s : src.entrySet()) {
 			LOG.info("JType="+s.getKey().toString());
 			for (Map.Entry<ResourceLocation, JsonObject> i : s.getValue().entrySet()) {
-				LOG.info("   "+i.getKey().toString()+":"+i.getValue().toString().substring(0, i.getValue().toString().length() > 2000 ? 2000 : i.getValue().toString().length()));
+				LOG.info("   "+i.getKey().toString()+":"+i.getValue().toString().length());
+						//+":"+i.getValue().toString().substring(0, i.getValue().toString().length() > 2000 ? 2000 : i.getValue().toString().length()));
 			}
 		}
 	}

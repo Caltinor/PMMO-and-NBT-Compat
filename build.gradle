@@ -19,7 +19,7 @@ repositories {
     flatDir { dirs 'libs'}
 }
 
-version = '1.1.3'
+version = '1.1.4'
 group = 'dicemc.dicemcpmmonbt'
 archivesBaseName = 'dicemcpmmonbt'
 
@@ -75,9 +75,9 @@ minecraft {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.16.5-36.1.4'
-    //compile fg.deobf("curse.maven:pmmo-353935:3266512")
-    implementation fg.deobf('local.maven:Project_MMO:1.16.5-3.52.2')
+    minecraft 'net.minecraftforge:forge:1.16.5-36.1.16'
+    compile fg.deobf("curse.maven:pmmo-353935:3308563")
+    //implementation fg.deobf('local.maven:Project_MMO:1.16.5-3.56')
     
     //testing inclusions
     runtimeOnly fg.deobf("curse.maven:tinkers-74072:3263129") 

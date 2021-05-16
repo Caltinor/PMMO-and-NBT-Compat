@@ -45,7 +45,7 @@ public class EvaluationHandler {
 					String comparator = "";
 					if (!operator.equalsIgnoreCase("EXISTS"))
 						comparator = pred.get("comparator").getAsString();
-					list.add(new Result(key, operator, comparator, values, nbtValue));
+					list.add(new Result(key, operator, comparator, values, operator.equalsIgnoreCase("EXISTS") ? key : nbtValue));
 				}
 			}
 			//if the type is a compound, go one step deeper with recursion
@@ -95,7 +95,7 @@ public class EvaluationHandler {
 									String comparator = "";
 									if (!operator.equalsIgnoreCase("EXISTS"))
 										comparator = pred.get("comparator").getAsString();
-									list.add(new Result(keyEntry, operator, comparator, values, nbtValue));
+									list.add(new Result(keyEntry, operator, comparator, values, operator.equalsIgnoreCase("EXISTS") ? keyEntry : nbtValue));
 								}
 							}
 						}
@@ -119,7 +119,7 @@ public class EvaluationHandler {
 								String comparator = "";
 								if (!operator.equalsIgnoreCase("EXISTS"))
 									comparator = pred.get("comparator").getAsString();
-								list.add(new Result(keyEntry, operator, comparator, values, nbtValue));
+								list.add(new Result(keyEntry, operator, comparator, values, operator.equalsIgnoreCase("EXISTS") ? keyEntry : nbtValue));
 							}
 						}
 					}
