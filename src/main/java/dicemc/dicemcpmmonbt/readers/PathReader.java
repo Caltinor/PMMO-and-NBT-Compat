@@ -6,6 +6,7 @@ import java.util.List;
 import com.mojang.brigadier.StringReader;
 
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 
 public class PathReader {
 	/**This method takes a raw NBT path (as syntactically defined by
@@ -17,11 +18,11 @@ public class PathReader {
 	 * @param path the NBT path to locate values
 	 * @param nbt the source to be searched
 	 * @return all possible values at path destinations
-	 */
-	/*
+	 */	
 	public static List<String> getNBTValues(String path, CompoundNBT nbt) {
 		List<String> nodes = parsePath(path);
-		return tracePath(nodes, nbt);
+		if (nbt.isEmpty() || nbt == null) return new ArrayList<String>();
+		return evaluateCompound(nodes, nbt);
 	}
 	
 	private static List<String> parsePath(String path) {
@@ -37,35 +38,103 @@ public class PathReader {
 			}
 			element += reader.read();
 		}
+		nodes.add(element);
 		return nodes;
 	}
 	
-	private static List<String> tracePath(List<String> nodes, CompoundNBT nbt) {
-		List<String> values = new ArrayList<>();
-		if (nodes.isEmpty()) return values;
-		for (int i = 0; i < values.size(); i++) {
-			if (isList(values.get(i))) {
-				
+	private static List<String> evaluateCompound(List<String> nodes, CompoundNBT nbt) {
+		List<String> list = new ArrayList<>();
+		if (nbt.isEmpty() || nbt == null) return list;
+		String nodeEntry = nodes.get(0);
+		nodes.remove(0);
+		
+		if (isList(nodeEntry)) {		
+			list.addAll(evaluateList(nodes, nodeEntry, (ListNBT) nbt.get(rawNode(nodeEntry))));
+		}
+		else if (isCompound(nodeEntry)) {
+			list.addAll(evaluateCompound(nodes, nbt.getCompound(rawNode(nodeEntry))));
+		}
+		else {
+			list.add(nbt.get(rawNode(nodeEntry)).getAsString());
+		}
+		
+		return list;
+	}
+	
+	private static List<String> evaluateList(List<String> nodes, String node, ListNBT lnbt) {		
+		List<String> list = new ArrayList<>();
+		if (lnbt == null) return list;
+		int index = getListIndex(node);
+		if (index == -2) index = getQualifiedIndex(node, lnbt);
+		if (index < -1 || index >= lnbt.size()) return list;
+		if (index == -1) {
+			for (int l = 0; l < lnbt.size(); l++) {
+				if (lnbt.get(0) instanceof CompoundNBT) {					
+					list.addAll(evaluateCompound(nodes, lnbt.getCompound(l)));
+				}
+				else if (lnbt.get(0) instanceof ListNBT) {
+					list.addAll(evaluateList(nodes, getListParameters(nodes.get(0)), lnbt.getList(l)));
+				}
+				else list.add(lnbt.get(l).getAsString());
 			}
 		}
-		return values;
-	}
-	
-	
-	
-	//HELPER METHODS
-	//this method might be better used in the expression reader
-	private static boolean peekKeyChar(StringReader reader) {
-		char c = reader.peek();
-		return c == '.' || c == '[';
-	}
-	private static boolean isList(String node) {
-		return node.contains("[");
-	}
-	private static int getListIndex(String node) {
-		if (isList(node)) {
-			
+		else {
+			if (lnbt.get(0) instanceof CompoundNBT) {					
+				list.addAll(evaluateCompound(nodes, lnbt.getCompound(index)));
+			}
+			else if (lnbt.get(0) instanceof ListNBT) {
+				list.addAll(evaluateList(nodes, getListParameters(nodes.get(0)), lnbt.getList(index)));
+			}
+			else list.add(lnbt.get(index).getAsString());
 		}
-		return -1;
-	}*/
+		
+		return list;
+	}
+	
+	
+	
+	//HELPER METHODS	
+	private static boolean isList(String node) {return node.contains("[");}
+	
+	private static boolean isCompound(String node) {return node.contains("{");}
+	
+	private static int getListIndex(String node) {
+		String rawIndex = getListParameters(node);
+		try { return rawIndex.isEmpty() ? -1 : Integer.valueOf(rawIndex);}
+		catch(NumberFormatException e) {return -2;}
+	}
+	
+	private static int getQualifiedIndex(String param, ListNBT lnbt) {
+		if (!isCompound(param)) return -2;
+		if (!(lnbt.get(0) instanceof CompoundNBT)) return -2;
+		String key = param.substring(param.indexOf("{")+1, param.indexOf(":"));
+		String value = param.substring(param.indexOf(":")+1, param.indexOf("}"));
+		value = rawValue(value);
+		for (int i = 0; i < lnbt.size(); i++) {
+			CompoundNBT element = lnbt.getCompound(i);
+			if (element.contains(key) && element.get(key).getAsString().equalsIgnoreCase(value)) return i;
+		}
+		return -2;
+	}
+	
+	private static String getListParameters(String node) {
+		if (isList(node)) {
+			int beginIndex = node.indexOf("[")+1;
+			int endIndex = node.indexOf("]");
+			return node.substring(beginIndex, endIndex);
+		}
+		return "";
+	}
+	
+	private static String rawNode(String node) {
+		if (isList(node)) return node.substring(0, node.indexOf("["));
+		else if (isCompound(node)) return node.substring(0, node.indexOf("{"));
+		else return node;
+		
+	}
+	
+	private static String rawValue(String val) {
+		int firstIndex = val.indexOf("\"");
+		return val.substring(firstIndex+1, val.indexOf("\"", firstIndex+1));
+	}
 }

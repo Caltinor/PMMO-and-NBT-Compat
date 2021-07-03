@@ -16,12 +16,10 @@ public class Result {
 	}
 	
 	public Operator operator;
-	public String res;
 	public String comparator, comparison;
 	public Map<String, Double> values = new HashMap<>();
 	
-	public Result(String key, String operator, String comparator, JsonObject values, String comparison) {
-		res = key;
+	public Result(String operator, String comparator, JsonObject values, String comparison) {
 		this.comparison = comparison;
 		for (int i = 0; i < Operator.values().length; i++) {
 			if (Operator.values()[i].toString().equalsIgnoreCase(operator)) {
@@ -53,7 +51,7 @@ public class Result {
 			return Double.valueOf(comparator) >= Double.valueOf(comparison);
 		}
 		case EXISTS: {
-			return comparison.equalsIgnoreCase(res);
+			return !comparison.isEmpty();
 		}
 		default: return false;}
 	}

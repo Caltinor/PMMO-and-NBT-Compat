@@ -1,3 +1,4 @@
 {
-	"pmmonbt.commands.print.error":"No NBT exists in the entity or block traced."
+	"pmmonbt.commands.print.error":"No NBT exists in the entity or block traced.",
+	"pmmonbt.data.itemstack.error":"Error in itemstack data pathing"
 }

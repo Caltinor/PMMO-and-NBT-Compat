@@ -1,46 +1,67 @@
 {
-	"global": {
-		"paths": {
-		
-		},
-		"constants": {
-		
-		}
-	},
-	"minecraft:item": {
-		"logic": [
-			{
-				"behavior_to_previous": "ADD_TO",
-				"should_cases_add": true,
-				"cases": {
-					"#default":  {"skill": 10, "otherskill": 15},
-					"#enchantment_name=#smite": { "skill": 10, "otherskill": 15}
-				}	
-			},
-			{
-				"behavior_to_previous": "HIGHEST",
-				"should_cases_add": false,
-				"cases": {
-					"#damage_value>#2":  {"skill": 10, "otherskill": 15},
-					"#enchantment_name=#smite": { "skill": 10, "otherskill": 15}
-				}	
-			},
-			{
-				"behavior_to_previous": "REPLACE",
-				"should_cases_add": true,
-				"cases": {
-					"#damage_value>#2":  {"skill": 10, "otherskill": 15},
-					"#enchantment_name=#smite": { "skill": 10, "otherskill": 15}
-				}	
-			}
-		],
-		"paths": {
-			"damage_value": "tag.Items[].damage",
-			"enchantment_name": "tag.Enchantments[].name"
-		},
-		"constants":{
-			"enchant_level": 3,
-			"smite": "minecraft:smite"
-		}
-	}
+    "global": {
+        "paths": {
+            "tmat0": "tic_materials[0]",
+            "tmat1": "tic_materials[1]",
+            "tmat2": "tic_materials[2]",
+            "tmat3": "tic_materials[3]"
+        },
+        "constants": {
+            "twood": "tconstruct:wood",
+            "tiron": "tconstruct:iron",
+            "tgold": "tconstruct:gold",
+            "tmanyullyn": "tconstruct:manyullyn"
+        }
+    },
+    "tconstruct:pickaxe": {
+        "logic": [
+            {
+                "behavior_to_previous": "ADD_TO",
+                "should_cases_add": true,
+                "cases": {
+                    "#tmat0==#twood": { "mining": 1 },
+                    "#tmat0==#tiron": { "mining": 5},
+                    "#tmat0==#tgold": { "mining": 7},
+                    "#tmat0==#tmanyullyn": { "mining": 30},
+
+                    "#tmat1==#twood": { "mining": 1 },
+                    "#tmat1==#tiron": { "mining": 5},
+                    "#tmat1==#tgold": { "mining": 5},
+                    "#tmat1==#tmanyullyn": { "mining": 10},
+
+                    "#tmat2==#twood": { "mining": 1 },
+                    "#tmat3==#tiron": { "mining": 2},
+                    "#tmat4==#tgold": { "mining": 5},
+                    "#tmat5==#tmanyullyn": { "mining": 10}
+                }
+            },
+            {
+                "behavior_to_previous": "HIGHEST",
+                "should_cases_add": true,
+                "cases": [
+                	{"path":"tic_materials[0]",
+                	 "operator": "EQUALS",
+                	 "comparator": "tconstruct:wood",
+                	 "value": {"mining": 1}
+                	},
+                	{"path":"#tmat0",
+                	 "operator": "EQUALS",
+                	 "comparator": "#twood",
+                	 "value": {"mining": 1}
+                	}
+                ]
+            },
+            {
+                "behavior_to_previous": "REPLACE",
+                "should_cases_add": true,
+                "cases": {}
+            }
+        ],
+        "paths": {
+        	"ench1":"tag{}.enchantment"
+        },
+        "constants": {
+        	"smite":"minecraft:smite"
+        }
+    }
 }

@@ -75,13 +75,13 @@ minecraft {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.16.5-36.1.16'
-    compile fg.deobf("curse.maven:pmmo-353935:3308563")
+    minecraft 'net.minecraftforge:forge:1.16.5-36.1.32'
+    compile fg.deobf("curse.maven:pmmo-353935:3365665")
     //implementation fg.deobf('local.maven:Project_MMO:1.16.5-3.56')
     
     //testing inclusions
-    runtimeOnly fg.deobf("curse.maven:tinkers-74072:3263129") 
-    runtimeOnly fg.deobf("curse.maven:mantle-74924:3180804")
+    runtimeOnly fg.deobf("curse.maven:tinkers-74072:3352983") 
+    runtimeOnly fg.deobf("curse.maven:mantle-74924:3352484")
     
     runtimeOnly fg.deobf("curse.maven:silentgear-297039:3272799") 
     runtimeOnly fg.deobf("curse.maven:silentlib-242998:3235738")

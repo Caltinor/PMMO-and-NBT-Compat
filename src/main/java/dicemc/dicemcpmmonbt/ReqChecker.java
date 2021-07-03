@@ -1,7 +1,6 @@
 package dicemc.dicemcpmmonbt;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.logging.log4j.Logger;
@@ -10,8 +9,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import dicemc.dicemcpmmonbt.readers.EvaluationHandler;
+import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.config.JType;
-import harmonised.pmmo.skills.Skill;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -40,7 +39,7 @@ public class ReqChecker {
 		if (tag == null) return true;
 		//XP check returns false if any criteria do not meet, otherwise proceeds to true return
 		for (Map.Entry<String, Double> vals : getNBTReqs(jType, stack).entrySet()) {
-			if (Skill.getLevel(vals.getKey(), player) < vals.getValue()) {
+			if (APIUtils.getLevel(vals.getKey(), player) < vals.getValue()) {
 				return false;
 			}
 		}
@@ -50,13 +49,13 @@ public class ReqChecker {
 	public static boolean checkNBTReq(PlayerEntity player, TileEntity tile, JType jType) {
 		if (!src.containsKey(jType)) return true;
 		if (!src.get(jType).containsKey(tile.getBlockState().getBlock().getRegistryName())) return true;
-		
+
 		//core logic
 		CompoundNBT tag = tile.serializeNBT();
 		if (tag == null) return true;
 		//XP check returns false if any criteria do not meet, otherwise proceeds to true return
 		for (Map.Entry<String, Double> vals : getNBTReqs(jType, tile).entrySet()) {
-			if (Skill.getLevel(vals.getKey(), player) < vals.getValue()) {
+			if (APIUtils.getLevel(vals.getKey(), player) < vals.getValue()) {
 				return false;
 			}
 		}
@@ -64,78 +63,33 @@ public class ReqChecker {
 	}
 	
 	public static Map<String, Double> getNBTReqs(JType jType, ItemStack stack) {
-		Map<String, Double> map = new HashMap<>();
 		CompoundNBT nbt = stack.getTag();
-		if (nbt == null) return map;
+		if (nbt == null) return new HashMap<>();
 		JsonObject ref = src.get(jType).getOrDefault(stack.getItem().getRegistryName(), new JsonObject());
-		if (jType.equals(JType.REQ_BREAK) && ref.get("item") != null) 
-			ref = ref.get("item").getAsJsonObject();		
-		if (ref.get("values") == null) return map;
-		JsonArray values = ref.get("values").getAsJsonArray();		
-		if (ref.get("summative") == null) return map;
-		boolean isSummative = ref.get("summative").getAsBoolean();
-		List<Result> data = EvaluationHandler.evaluateEntries(values, nbt);
-		for (Result r : data) {
-			if (r == null) continue;
-			if (!r.compares()) continue;
-			Map<String, Double> value = r.values;					
-			for (Map.Entry<String, Double> val : value.entrySet()) {
-				map.merge(val.getKey(), val.getValue(), (in1, in2) -> {
-					return isSummative ? (in1 + in2)
-							: (in1 > in2 ? in1 : in2);});
-			}
-		}
-		return map;
+		if (jType.equals(JType.REQ_BREAK) && ref.get("item") != null) {ref = ref.get("item").getAsJsonObject();}		
+		if (ref.get("logic") == null) {return new HashMap<>();}
+		JsonArray values = ref.get("logic").getAsJsonArray();
+		JsonObject globals = src.get(jType).getOrDefault(new ResourceLocation("global"), new JsonObject());
+		return EvaluationHandler.evaluateEntries(values, nbt, globals);
 	}
 	
 	public static Map<String, Double> getNBTReqs(JType jType, TileEntity tile) {
 		CompoundNBT nbt = tile.serializeNBT();
 		JsonObject ref = src.get(jType).getOrDefault(tile.getBlockState().getBlock().getRegistryName(), new JsonObject());
-		if (jType.equals(JType.REQ_BREAK) && ref.get("tile") != null)
-			ref = ref.get("tile").getAsJsonObject();
-		Map<String, Double> map = new HashMap<>();
-		if (ref.get("values") == null)
-			return map;
-		JsonArray values = ref.get("values").getAsJsonArray();		
-		if (ref.get("summative") == null)
-			return map;
-		boolean isSummative = ref.get("summative").getAsBoolean();
-		List<Result> data = EvaluationHandler.evaluateEntries(values, nbt);
-		for (Result r : data) {
-			if (r == null) continue;
-			if (!r.compares()) continue;
-			Map<String, Double> value = r.values;					
-			for (Map.Entry<String, Double> val : value.entrySet()) {
-				map.merge(val.getKey(), val.getValue(), (in1, in2) -> {
-					return isSummative ? (in1 + in2)
-							: (in1 > in2 ? in1 : in2);});
-			}
-		}
-		return map;
+		if (jType.equals(JType.REQ_BREAK) && ref.get("tile") != null) {ref = ref.get("tile").getAsJsonObject();}
+		if (ref.get("logic") == null) {return new HashMap<>();}
+		JsonArray values = ref.get("logic").getAsJsonArray();		
+		JsonObject globals = src.get(jType).getOrDefault(new ResourceLocation("global"), new JsonObject());
+		return EvaluationHandler.evaluateEntries(values, nbt, globals);
 	}
 	
 	public static Map<String, Double> getNBTReqs(JType jType, Entity entity) {
 		CompoundNBT nbt = entity.serializeNBT();
 		JsonObject ref = src.get(jType).getOrDefault(entity.getType().getRegistryName(), new JsonObject());
-		Map<String, Double> map = new HashMap<>();
-		if (ref.get("values") == null)
-			return map;
-		JsonArray values = ref.get("values").getAsJsonArray();		
-		if (ref.get("summative") == null)
-			return map;
-		boolean isSummative = ref.get("summative").getAsBoolean();
-		List<Result> data = EvaluationHandler.evaluateEntries(values, nbt);
-		for (Result r : data) {
-			if (r == null) continue;
-			if (!r.compares()) continue;
-			Map<String, Double> value = r.values;					
-			for (Map.Entry<String, Double> val : value.entrySet()) {
-				map.merge(val.getKey(), val.getValue(), (in1, in2) -> {
-					return isSummative ? (in1 + in2)
-							: (in1 > in2 ? in1 : in2);});
-			}
-		}
-		return map;
+		if (ref.get("logic") == null) {return new HashMap<>();}
+		JsonArray values = ref.get("values").getAsJsonArray();			
+		JsonObject globals = src.get(jType).getOrDefault(new ResourceLocation("global"), new JsonObject());
+		return EvaluationHandler.evaluateEntries(values, nbt, globals);
 	}
 	
 	public static void printSrc(Logger LOG) {

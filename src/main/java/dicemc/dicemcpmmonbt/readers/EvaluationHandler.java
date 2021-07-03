@@ -1,131 +1,106 @@
 package dicemc.dicemcpmmonbt.readers;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
-
+import java.util.Map;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.mojang.datafixers.util.Pair;
 
 import dicemc.dicemcpmmonbt.Result;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
 
 public class EvaluationHandler {
 	
-	//entry point and compoundNBT evaluator
-	public static List<Result> evaluateEntries(JsonArray jarr, CompoundNBT nbt) {		
-		List<Result> list = new ArrayList<>();
-		
+	//entry point
+	public static Map<String, Double> evaluateEntries(JsonArray logic, CompoundNBT nbt, JsonObject globals) {
+		Map<String, Double> map = new HashMap<>();		
 		//cancels evaluation if NBT has no data
-		if (nbt.isEmpty() || nbt == null) return list;
-		
-		for (int i = 0; i < jarr.size(); i++) {
-			JsonObject obj = jarr.get(i).getAsJsonObject();
-			list.addAll(evaluateEntry(obj, nbt));
+		if (nbt.isEmpty() || nbt == null) return map;
+		//this section cycles through the logic and generates usable result objects
+		LinkedHashMap<Pair<String, Boolean>, List<Result>> logicMap = new LinkedHashMap<>();
+		for (int i = 0; i < logic.size(); i++) {
+			JsonObject logicValue = logic.get(i).getAsJsonObject();
+			String relationToHigher = logicValue.get("behavior_to_previous").getAsString();
+			boolean summative = logicValue.get("should_cases_add").getAsBoolean();
+			JsonArray pred = logicValue.get("cases").getAsJsonArray();
+			logicMap.put(Pair.of(relationToHigher, summative), processCases(pred, nbt, globals));
+		}
+		//This section iterates through the logical tiers and processes the summative attribute
+		List<Map<String, Double>> interMap = new ArrayList<>();
+		List<Pair<String, Boolean>> keys = new ArrayList<>(logicMap.keySet());
+		for (int i = 0; i < keys.size(); i++) {
+			Map<String, Double> combinedMap = new HashMap<>();
+			List<Result> data = logicMap.get(keys.get(i));
+			boolean isSummative = keys.get(i).getSecond();
+			for (Result r : data) {
+				if (r == null) continue;
+				if (!r.compares()) continue;
+				Map<String, Double> value = r.values;					
+				for (Map.Entry<String, Double> val : value.entrySet()) {
+					combinedMap.merge(val.getKey(), val.getValue(), (in1, in2) -> {
+						return isSummative ? (in1 + in2)
+								: (in1 > in2 ? in1 : in2);});
+				}
+			}
+			interMap.add(combinedMap);
+		}
+		//this section iterates through the logical tiers and processes the relational attribute
+		for (int i = 0; i < keys.size(); i++) {
+			switch (keys.get(i).getFirst()) {
+			default: case "ADD_TO": {
+				for (Map.Entry<String, Double> value : interMap.get(i).entrySet()) {
+					map.merge(value.getKey(), value.getValue(), (oldValue, newValue) -> oldValue + newValue);
+				}
+				break;
+			}
+			case "SUB_FROM": {
+				for (Map.Entry<String, Double> value : interMap.get(i).entrySet()) {
+					map.merge(value.getKey(), value.getValue(), (oldValue, newValue) -> Math.max(0, oldValue - newValue));
+				}
+				break;
+			}
+			case "HIGHEST": {
+				for (Map.Entry<String, Double> value : interMap.get(i).entrySet()) {
+					map.merge(value.getKey(), value.getValue(), (oldValue, newValue) -> oldValue > newValue ? oldValue : newValue);
+				}
+				break;
+			}
+			case "REPLACE": {
+				for (Map.Entry<String, Double> value : interMap.get(i).entrySet()) {
+					map.put(value.getKey(), value.getValue());
+				}
+				break;
+			}
+			}
 		}
 		
-		return list;
+		return map;
 	}
 	
-	private static List<Result> evaluateEntry(JsonObject obj, CompoundNBT nbt) {
-		List<Result> list = new ArrayList<>();
-		
-		String type = obj.getAsJsonObject().get("type").getAsString();
-		JsonArray keyArr = obj.getAsJsonObject().get("keys").getAsJsonArray();
-		//if the root NBT contains the desired key, process the key
-		for (int k = 0; k < keyArr.size(); k++) {
-			String key = keyArr.get(k).getAsString();
-			if (type.equalsIgnoreCase("id") && nbt.contains(key)) {
-				String nbtValue = nbt.get(key).getAsString();
-				JsonArray predicates = obj.get("predicates").getAsJsonArray();
-				for (int i = 0; i < predicates.size(); i++) {
-					JsonObject pred = predicates.get(i).getAsJsonObject();
-					String operator = pred.get("operator").getAsString();
-					JsonObject values = pred.get("value").getAsJsonObject();
-					String comparator = "";
-					if (!operator.equalsIgnoreCase("EXISTS"))
-						comparator = pred.get("comparator").getAsString();
-					list.add(new Result(key, operator, comparator, values, nbtValue));
-				}
-			}
-			//if the type is a compound, go one step deeper with recursion
-			else if (type.equalsIgnoreCase("compound")){
-				CompoundNBT nbtOut = key.equalsIgnoreCase("") ? nbt : nbt.getCompound(key);
-				JsonArray subArray = obj.getAsJsonObject().get("sub_references").getAsJsonArray();
-				for (int i = 0; i < subArray.size(); i ++) {
-					list.addAll(evaluateEntry(subArray.get(i).getAsJsonObject(), nbtOut));
-				}
-			}
-			//if the type is list process list logic
-			else if (type.equalsIgnoreCase("list")) {
-				list.addAll(evaluateList(obj, (ListNBT) nbt.get(key)));
+	private static List<Result> processCases(JsonArray cases, CompoundNBT nbt, JsonObject globals) {
+		List<Result> results = new ArrayList<>();
+		for (int i = 0; i < cases.size(); i++) {
+			JsonObject pred = cases.get(i).getAsJsonObject();
+			String operator = pred.get("operator").getAsString();
+			JsonObject values = pred.get("value").getAsJsonObject();
+			String comparator = "";
+			if (!operator.equalsIgnoreCase("EXISTS"))
+				comparator = pred.get("comparator").getAsString();
+			//TODO find a way to use multiple "paths":["path1","path2"]
+			List<String> comparison = PathReader.getNBTValues(getPathOrGlobal(globals, pred.get("path").getAsString()), nbt); 
+			for (int j = 0; j < comparison.size(); j++) {
+				results.add(new Result(operator, comparator, values, comparison.get(j)));
 			}
 		}
-		return list;
+		return results;
 	}
-	//list evaluator
-	private static List<Result> evaluateList(JsonObject obj, ListNBT lnbt){
-		List<Result> list = new ArrayList<>();
-		if (lnbt == null) return list;
-		
-		JsonArray subArray = obj.getAsJsonObject().get("sub_references").getAsJsonArray();
-		int index = obj.getAsJsonObject().get("index").getAsInt();
-		//safety for invalid json entries
-		if (index < -1 || index >= lnbt.size()) return list;
+	
+	private static String getPathOrGlobal(JsonObject globals, String key) {
+		//Note, local paths and constants will not be in this iteration
+		return key.contains("#") ? globals.get("paths").getAsJsonObject().get(key.replace("#", "")).getAsString() : key;
+	}
 
-		if (lnbt.size() > 0) {
-			for (int s = 0; s < subArray.size(); s++) {
-				JsonObject subRef = subArray.get(s).getAsJsonObject();
-				if (index == -1) {
-					for (int i = 0; i < lnbt.size(); i++) {
-						if (lnbt.get(0) instanceof CompoundNBT)
-							list.addAll(evaluateEntry(subRef, lnbt.getCompound(i)));
-						else if (lnbt.get(0) instanceof ListNBT)
-							list.addAll(evaluateList(subRef, lnbt.getList(i)));
-						else {
-							JsonArray keys = subRef.get("keys").getAsJsonArray();
-							for (int sk = 0; sk < keys.size(); sk++) {
-								String keyEntry = keys.get(sk).getAsString();
-								String nbtValue = lnbt.get(i).getAsString();
-								JsonArray predicates = subRef.get("predicates").getAsJsonArray();
-								for (int j = 0; j < predicates.size(); j++) {
-									JsonObject pred = predicates.get(j).getAsJsonObject();
-									String operator = pred.get("operator").getAsString();
-									JsonObject values = pred.get("value").getAsJsonObject();
-									String comparator = "";
-									if (!operator.equalsIgnoreCase("EXISTS"))
-										comparator = pred.get("comparator").getAsString();
-									list.add(new Result(keyEntry, operator, comparator, values, nbtValue));
-								}
-							}
-						}
-					}
-				}
-				else {
-					if (lnbt.get(0) instanceof CompoundNBT)
-						list.addAll(evaluateEntry(subRef, lnbt.getCompound(index)));
-					else if (lnbt.get(0) instanceof ListNBT)
-						list.addAll(evaluateList(subRef, lnbt.getList(index)));
-					else {
-						JsonArray keys = subRef.get("keys").getAsJsonArray();
-						for (int sk = 0; sk < keys.size(); sk++) {
-							String keyEntry = keys.get(sk).getAsString();
-							String nbtValue = lnbt.get(index).getAsString();
-							JsonArray predicates = subRef.get("predicates").getAsJsonArray();
-							for (int j = 0; j < predicates.size(); j++) {
-								JsonObject pred = predicates.get(j).getAsJsonObject();
-								String operator = pred.get("operator").getAsString();
-								JsonObject values = pred.get("value").getAsJsonObject();
-								String comparator = "";
-								if (!operator.equalsIgnoreCase("EXISTS"))
-									comparator = pred.get("comparator").getAsString();
-								list.add(new Result(keyEntry, operator, comparator, values, nbtValue));
-							}
-						}
-					}
-				}
-			}
-		}
-		return list;
-	}
 }

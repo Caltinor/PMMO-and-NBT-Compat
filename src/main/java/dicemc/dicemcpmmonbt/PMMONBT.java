@@ -12,6 +12,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
 
@@ -21,6 +22,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.google.gson.JsonObject;
 
+import dicemc.dicemcpmmonbt.commands.PathCommand;
 import dicemc.dicemcpmmonbt.commands.PrintCommand;
 import dicemc.dicemcpmmonbt.commands.ReloadCommand;
 import dicemc.dicemcpmmonbt.network.Networking;
@@ -39,12 +41,10 @@ import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-// The value here should match an entry in the META-INF/mods.toml file
 @Mod(PMMONBT.MOD_ID)
 public class PMMONBT
 {
 	public static final String MOD_ID = "dicemcpmmonbt"; 
-    // Directly reference a log4j logger.
     public static final Logger LOGGER = LogManager.getLogger();
 
     public PMMONBT() {
@@ -59,35 +59,14 @@ public class PMMONBT
     
     public void setup(final FMLCommonSetupEvent event) {
     	Networking.registerMessages();
-    	registerLogic();
     }
-    
-    /*@SubscribeEvent
-    public void printEntity(EntityInteract event) {
-    	event.getPlayer().sendMessage(new StringTextComponent(event.getTarget().getType().getRegistryName().toString()), event.getPlayer().getUUID());
-    	event.getPlayer().sendMessage(new StringTextComponent(event.getTarget().serializeNBT().toString()), event.getPlayer().getUUID());
-    	System.out.println(TooltipSupplier.tooltipExists(event.getTarget().getType().getRegistryName(), JType.XP_VALUE_KILL));
-    }
-    
-    @SubscribeEvent
-    public void printblock(PlayerInteractEvent.RightClickBlock event) {
-    	if (event.getWorld().getBlockEntity(event.getPos()) == null) return;
-    	event.getPlayer().sendMessage(new StringTextComponent("PMMO output"), event.getPlayer().getUUID());
-    	Map<String, Double> output = XP.getXp(event.getWorld().getBlockEntity(event.getPos()), JType.XP_VALUE_BREAK);
-    	for (Map.Entry<String, Double> map : output.entrySet()) {
-    		event.getPlayer().sendMessage(new StringTextComponent(map.getKey()+":"+map.getValue()), event.getPlayer().getUUID());
-    	}
-    	event.getPlayer().sendMessage(new StringTextComponent("NBT output"), event.getPlayer().getUUID());
-    	output = ReqChecker.getNBTReqs(JType.XP_VALUE_BREAK, event.getWorld().getBlockEntity(event.getPos()));
-    	for (Map.Entry<String, Double> map : output.entrySet()) {
-    		event.getPlayer().sendMessage(new StringTextComponent(map.getKey()+":"+map.getValue()), event.getPlayer().getUUID());
-    	}
-    }*/
 
     @SubscribeEvent
     public void onCommandRegister(RegisterCommandsEvent event) {
         ReloadCommand.register(event.getDispatcher());
         PrintCommand.register(event.getDispatcher());
+        //this might replace the print command since it has multiple utilities
+        PathCommand.register(event.getDispatcher());
     }   
     
     @SuppressWarnings("resource")
@@ -95,6 +74,13 @@ public class PMMONBT
     public void onPlayerJoin(PlayerLoggedInEvent event) {
     	if (!event.getPlayer().getCommandSenderWorld().isClientSide)
     		Networking.sendToClient(new PacketSync(ReqChecker.src), (ServerPlayerEntity) event.getPlayer());
+    }
+    
+    @SubscribeEvent
+    public void onServerStart(FMLServerStartedEvent event) {
+    	JsonParser.parseTags(event.getServer());
+    	ReqChecker.printSrc(LOGGER);
+    	registerLogic();
     }
     
     public static void registerLogic() {

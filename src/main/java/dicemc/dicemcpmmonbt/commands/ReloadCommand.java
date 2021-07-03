@@ -28,6 +28,7 @@ public class ReloadCommand implements Command<CommandSource> {
 	@Override
 	public int run(CommandContext<CommandSource> context) throws CommandSyntaxException {
 		JsonParser.readRawData();
+		JsonParser.parseTags(context.getSource().getServer());
 		PMMONBT.registerLogic();
 		List<ServerPlayerEntity> playerlist = context.getSource().getServer().getPlayerList().getPlayers();
 		PacketSync packet = new PacketSync(ReqChecker.src);
