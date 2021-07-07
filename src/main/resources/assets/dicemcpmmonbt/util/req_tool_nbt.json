@@ -13,298 +13,139 @@
 		"logic": [
 			{"behavior_to_previous": "ADD_TO", "should_cases_add": false,
 			 "cases": [
-			 	{"path": "tic_materials[]", "comparator": "tconstruct:wood",			"operator": "EQUALS", "value": { "mining": 1}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:stone",			"operator": "EQUALS", "value": { "mining": 5}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:flint",			"operator": "EQUALS", "value": { "mining": 5}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:bone",			"operator": "EQUALS", "value": { "mining": 5}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:necrotic_bone",	"operator": "EQUALS", "value": { "mining": 5}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:iron",			"operator": "EQUALS", "value": { "mining": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:seared_stone",	"operator": "EQUALS", "value": { "mining": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:scorched_stone",	"operator": "EQUALS", "value": { "mining": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:copper",			"operator": "EQUALS", "value": { "mining": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:slimewood",		"operator": "EQUALS", "value": { "mining": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:lead",			"operator": "EQUALS", "value": { "mining": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:silver",			"operator": "EQUALS", "value": { "mining": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:slimesteel",		"operator": "EQUALS", "value": { "mining": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:steel",			"operator": "EQUALS", "value": { "mining": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:bronze",			"operator": "EQUALS", "value": { "mining": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:tinkers_bronze",	"operator": "EQUALS", "value": { "mining": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:nahuatl",			"operator": "EQUALS", "value": { "mining": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:pig_iron",		"operator": "EQUALS", "value": { "mining": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:rose_gold",		"operator": "EQUALS", "value": { "mining": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:constantan",		"operator": "EQUALS", "value": { "mining": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:electrum",		"operator": "EQUALS", "value": { "mining": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:cobalt",			"operator": "EQUALS", "value": { "mining": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:queens_slime",	"operator": "EQUALS", "value": { "mining": 30}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:hepatizon",		"operator": "EQUALS", "value": { "mining": 30}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:manyullyn",		"operator": "EQUALS", "value": { "mining": 30}}
-			 ]}
+			 	{"paths": ["tic_materials[]"],
+			 	 "criteria": [
+			 	 	{"operator": "EQUALS","comparators": ["tconstruct:necrotic_bone","tconstruct:bone","tconstruct:flint","tconstruct:stone","tconstruct:wood"],"value": { "mining": 1}},
+					{"operator": "EQUALS","comparators": ["tconstruct:iron","tconstruct:seared_stone","tconstruct:scorched_stone","tconstruct:copper","tconstruct:slimewood","tconstruct:lead","tconstruct:silver","tconstruct:electrum"], "value": { "mining": 10}},
+					{"operator": "EQUALS","comparators": ["tconstruct:slimesteel","tconstruct:steel","tconstruct:bronze","tconstruct:tinkers_bronze","tconstruct:nahuatl","tconstruct:pig_iron","tconstruct:rose_gold","tconstruct:constantan","tconstruct:cobalt"],"value": { "mining": 20}},
+					{"operator": "EQUALS","comparators": ["tconstruct:queens_slime","tconstruct:hepatizon","tconstruct:manyullyn"],"value": { "mining": 30}}
+			 	]}
+			]}
 		]
 	},
 	"tconstruct:sledge_hammer": {
 		"logic": [
 			{"behavior_to_previous": "ADD_TO", "should_cases_add": false,
 			 "cases": [
-			 	{"path": "tic_materials[]", "comparator": "tconstruct:wood",			"operator": "EQUALS", "value": { "mining": 1}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:stone",			"operator": "EQUALS", "value": { "mining": 5}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:flint",			"operator": "EQUALS", "value": { "mining": 5}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:bone",			"operator": "EQUALS", "value": { "mining": 5}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:necrotic_bone",	"operator": "EQUALS", "value": { "mining": 5}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:iron",			"operator": "EQUALS", "value": { "mining": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:seared_stone",	"operator": "EQUALS", "value": { "mining": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:scorched_stone",	"operator": "EQUALS", "value": { "mining": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:copper",			"operator": "EQUALS", "value": { "mining": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:slimewood",		"operator": "EQUALS", "value": { "mining": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:lead",			"operator": "EQUALS", "value": { "mining": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:silver",			"operator": "EQUALS", "value": { "mining": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:slimesteel",		"operator": "EQUALS", "value": { "mining": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:steel",			"operator": "EQUALS", "value": { "mining": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:bronze",			"operator": "EQUALS", "value": { "mining": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:tinkers_bronze",	"operator": "EQUALS", "value": { "mining": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:nahuatl",			"operator": "EQUALS", "value": { "mining": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:pig_iron",		"operator": "EQUALS", "value": { "mining": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:rose_gold",		"operator": "EQUALS", "value": { "mining": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:constantan",		"operator": "EQUALS", "value": { "mining": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:electrum",		"operator": "EQUALS", "value": { "mining": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:cobalt",			"operator": "EQUALS", "value": { "mining": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:queens_slime",	"operator": "EQUALS", "value": { "mining": 30}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:hepatizon",		"operator": "EQUALS", "value": { "mining": 30}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:manyullyn",		"operator": "EQUALS", "value": { "mining": 30}}
-			 ]}
+			 	{"paths": ["tic_materials[]"],
+			 	 "criteria": [
+			 	 	{"operator": "EQUALS","comparators": ["tconstruct:necrotic_bone","tconstruct:bone","tconstruct:flint","tconstruct:stone","tconstruct:wood"],"value": { "mining": 1}},
+					{"operator": "EQUALS","comparators": ["tconstruct:iron","tconstruct:seared_stone","tconstruct:scorched_stone","tconstruct:copper","tconstruct:slimewood","tconstruct:lead","tconstruct:silver","tconstruct:electrum"], "value": { "mining": 10}},
+					{"operator": "EQUALS","comparators": ["tconstruct:slimesteel","tconstruct:steel","tconstruct:bronze","tconstruct:tinkers_bronze","tconstruct:nahuatl","tconstruct:pig_iron","tconstruct:rose_gold","tconstruct:constantan","tconstruct:cobalt"],"value": { "mining": 20}},
+					{"operator": "EQUALS","comparators": ["tconstruct:queens_slime","tconstruct:hepatizon","tconstruct:manyullyn"],"value": { "mining": 30}}
+			 	]}
+			]}
 		]
 	},
 	"tconstruct:mattock": {
 		"logic": [
 			{"behavior_to_previous": "ADD_TO", "should_cases_add": false,
 			 "cases": [
-			 	{"path": "tic_materials[]", "comparator": "tconstruct:wood",			"operator": "EQUALS", "value": { "woodcutting":  1,"excavation":  1,"farming": 1}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:stone",			"operator": "EQUALS", "value": { "woodcutting":  5,"excavation":  5,"farming": 5}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:flint",			"operator": "EQUALS", "value": { "woodcutting":  5,"excavation":  5,"farming": 5}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:bone",			"operator": "EQUALS", "value": { "woodcutting":  5,"excavation":  5,"farming": 5}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:necrotic_bone",	"operator": "EQUALS", "value": { "woodcutting":  5,"excavation":  5,"farming": 5}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:scorched_stone",	"operator": "EQUALS", "value": { "woodcutting":  10,"excavation": 10,"farming": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:iron",			"operator": "EQUALS", "value": { "woodcutting":  10,"excavation": 10,"farming": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:seared_stone",	"operator": "EQUALS", "value": { "woodcutting":  10,"excavation": 10,"farming": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:copper",			"operator": "EQUALS", "value": { "woodcutting":  10,"excavation": 10,"farming": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:slimewood",		"operator": "EQUALS", "value": { "woodcutting":  10,"excavation": 10,"farming": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:lead",			"operator": "EQUALS", "value": { "woodcutting":  10,"excavation": 10,"farming": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:silver",			"operator": "EQUALS", "value": { "woodcutting":  10,"excavation": 10,"farming": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:slimesteel",		"operator": "EQUALS", "value": { "woodcutting":  20,"excavation": 20,"farming": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:steel",			"operator": "EQUALS", "value": { "woodcutting":  20,"excavation": 20,"farming": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:bronze",			"operator": "EQUALS", "value": { "woodcutting":  20,"excavation": 20,"farming": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:tinkers_bronze",	"operator": "EQUALS", "value": { "woodcutting":  20,"excavation": 20,"farming": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:nahuatl",			"operator": "EQUALS", "value": { "woodcutting":  20,"excavation": 20,"farming": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:pig_iron",		"operator": "EQUALS", "value": { "woodcutting":  20,"excavation": 20,"farming": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:rose_gold",		"operator": "EQUALS", "value": { "woodcutting":  20,"excavation": 20,"farming": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:constantan",		"operator": "EQUALS", "value": { "woodcutting":  20,"excavation": 20,"farming": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:electrum",		"operator": "EQUALS", "value": { "woodcutting":  10,"excavation": 10,"farming": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:cobalt",			"operator": "EQUALS", "value": { "woodcutting":  20,"excavation": 20,"farming": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:queens_slime",	"operator": "EQUALS", "value": { "woodcutting":  30,"excavation": 30,"farming": 30}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:hepatizon",		"operator": "EQUALS", "value": { "woodcutting":  30,"excavation": 30,"farming": 30}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:manyullyn",		"operator": "EQUALS", "value": { "woodcutting":  30,"excavation": 30,"farming": 30}}
-			 ]}
+			 	{"paths": ["tic_materials[]"],
+			 	 "criteria": [
+			 	 	{"operator": "EQUALS","comparators": ["tconstruct:necrotic_bone","tconstruct:bone","tconstruct:flint","tconstruct:stone","tconstruct:wood"],"value": { "woodcutting": 1,"excavation": 1, "farming": 1}},
+					{"operator": "EQUALS","comparators": ["tconstruct:iron","tconstruct:seared_stone","tconstruct:scorched_stone","tconstruct:copper","tconstruct:slimewood","tconstruct:lead","tconstruct:silver","tconstruct:electrum"], "value": { "woodcutting": 10,"excavation": 10, "farming": 10}},
+					{"operator": "EQUALS","comparators": ["tconstruct:slimesteel","tconstruct:steel","tconstruct:bronze","tconstruct:tinkers_bronze","tconstruct:nahuatl","tconstruct:pig_iron","tconstruct:rose_gold","tconstruct:constantan","tconstruct:cobalt"],"value": { "woodcutting": 20,"excavation": 20, "farming": 20}},
+					{"operator": "EQUALS","comparators": ["tconstruct:queens_slime","tconstruct:hepatizon","tconstruct:manyullyn"],"value": { "woodcutting":30 ,"excavation": 30, "farming": 30}}
+			 	]}
+			]}
 		]
 	},
 	"tconstruct:excavator": {
 		"logic": [
 			{"behavior_to_previous": "ADD_TO", "should_cases_add": false,
 			 "cases": [
-			 	{"path": "tic_materials[]", "comparator": "tconstruct:wood",			"operator": "EQUALS", "value": { "excavation": 1}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:stone",			"operator": "EQUALS", "value": { "excavation": 5}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:flint",			"operator": "EQUALS", "value": { "excavation": 5}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:bone",			"operator": "EQUALS", "value": { "excavation": 5}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:necrotic_bone",	"operator": "EQUALS", "value": { "excavation": 5}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:iron",			"operator": "EQUALS", "value": { "excavation": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:seared_stone",	"operator": "EQUALS", "value": { "excavation": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:scorched_stone",	"operator": "EQUALS", "value": { "excavation": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:copper",			"operator": "EQUALS", "value": { "excavation": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:slimewood",		"operator": "EQUALS", "value": { "excavation": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:lead",			"operator": "EQUALS", "value": { "excavation": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:silver",			"operator": "EQUALS", "value": { "excavation": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:slimesteel",		"operator": "EQUALS", "value": { "excavation": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:steel",			"operator": "EQUALS", "value": { "excavation": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:bronze",			"operator": "EQUALS", "value": { "excavation": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:tinkers_bronze",	"operator": "EQUALS", "value": { "excavation": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:nahuatl",			"operator": "EQUALS", "value": { "excavation": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:pig_iron",		"operator": "EQUALS", "value": { "excavation": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:rose_gold",		"operator": "EQUALS", "value": { "excavation": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:constantan",		"operator": "EQUALS", "value": { "excavation": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:electrum",		"operator": "EQUALS", "value": { "excavation": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:cobalt",			"operator": "EQUALS", "value": { "excavation": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:queens_slime",	"operator": "EQUALS", "value": { "excavation": 30}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:hepatizon",		"operator": "EQUALS", "value": { "excavation": 30}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:manyullyn",		"operator": "EQUALS", "value": { "excavation": 30}}
-			 ]}
+			 	{"paths": ["tic_materials[]"],
+			 	 "criteria": [
+			 	 	{"operator": "EQUALS","comparators": ["tconstruct:necrotic_bone","tconstruct:bone","tconstruct:flint","tconstruct:stone","tconstruct:wood"],"value": { "excavation": 1}},
+					{"operator": "EQUALS","comparators": ["tconstruct:iron","tconstruct:seared_stone","tconstruct:scorched_stone","tconstruct:copper","tconstruct:slimewood","tconstruct:lead","tconstruct:silver","tconstruct:electrum"], "value": { "excavation": 10}},
+					{"operator": "EQUALS","comparators": ["tconstruct:slimesteel","tconstruct:steel","tconstruct:bronze","tconstruct:tinkers_bronze","tconstruct:nahuatl","tconstruct:pig_iron","tconstruct:rose_gold","tconstruct:constantan","tconstruct:cobalt"],"value": { "excavation": 20}},
+					{"operator": "EQUALS","comparators": ["tconstruct:queens_slime","tconstruct:hepatizon","tconstruct:manyullyn"],"value": { "excavation": 30}}
+			 	]}
+			]}
 		]
 	},
 	"tconstruct:axe": {
 		"logic": [
 			{"behavior_to_previous": "ADD_TO", "should_cases_add": false,
 			 "cases": [
-			 	{"path": "tic_materials[]", "comparator": "tconstruct:wood",			"operator": "EQUALS", "value": { "woodcutting": 1}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:stone",			"operator": "EQUALS", "value": { "woodcutting": 5}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:flint",			"operator": "EQUALS", "value": { "woodcutting": 5}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:bone",			"operator": "EQUALS", "value": { "woodcutting": 5}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:necrotic_bone",	"operator": "EQUALS", "value": { "woodcutting": 5}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:iron",			"operator": "EQUALS", "value": { "woodcutting": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:seared_stone",	"operator": "EQUALS", "value": { "woodcutting": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:scorched_stone",	"operator": "EQUALS", "value": { "woodcutting": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:copper",			"operator": "EQUALS", "value": { "woodcutting": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:slimewood",		"operator": "EQUALS", "value": { "woodcutting": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:lead",			"operator": "EQUALS", "value": { "woodcutting": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:silver",			"operator": "EQUALS", "value": { "woodcutting": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:slimesteel",		"operator": "EQUALS", "value": { "woodcutting": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:steel",			"operator": "EQUALS", "value": { "woodcutting": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:bronze",			"operator": "EQUALS", "value": { "woodcutting": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:tinkers_bronze",	"operator": "EQUALS", "value": { "woodcutting": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:nahuatl",			"operator": "EQUALS", "value": { "woodcutting": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:pig_iron",		"operator": "EQUALS", "value": { "woodcutting": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:rose_gold",		"operator": "EQUALS", "value": { "woodcutting": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:constantan",		"operator": "EQUALS", "value": { "woodcutting": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:electrum",		"operator": "EQUALS", "value": { "woodcutting": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:cobalt",			"operator": "EQUALS", "value": { "woodcutting": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:queens_slime",	"operator": "EQUALS", "value": { "woodcutting": 30}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:hepatizon",		"operator": "EQUALS", "value": { "woodcutting": 30}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:manyullyn",		"operator": "EQUALS", "value": { "woodcutting": 30}}
-			 ]}
+			 	{"paths": ["tic_materials[]"],
+			 	 "criteria": [
+			 	 	{"operator": "EQUALS","comparators": ["tconstruct:necrotic_bone","tconstruct:bone","tconstruct:flint","tconstruct:stone","tconstruct:wood"],"value": { "woodcutting": 1}},
+					{"operator": "EQUALS","comparators": ["tconstruct:iron","tconstruct:seared_stone","tconstruct:scorched_stone","tconstruct:copper","tconstruct:slimewood","tconstruct:lead","tconstruct:silver","tconstruct:electrum"], "value": { "woodcutting": 10}},
+					{"operator": "EQUALS","comparators": ["tconstruct:slimesteel","tconstruct:steel","tconstruct:bronze","tconstruct:tinkers_bronze","tconstruct:nahuatl","tconstruct:pig_iron","tconstruct:rose_gold","tconstruct:constantan","tconstruct:cobalt"],"value": { "woodcutting": 20}},
+					{"operator": "EQUALS","comparators": ["tconstruct:queens_slime","tconstruct:hepatizon","tconstruct:manyullyn"],"value": { "woodcutting": 30}}
+			 	]}
+			]}
 		]
 	},
 	"tconstruct:kama": {
 		"logic": [
 			{"behavior_to_previous": "ADD_TO", "should_cases_add": false,
 			 "cases": [
-			 	{"path": "tic_materials[]", "comparator": "tconstruct:wood",			"operator": "EQUALS", "value": { "farming": 1}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:stone",			"operator": "EQUALS", "value": { "farming": 5}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:flint",			"operator": "EQUALS", "value": { "farming": 5}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:bone",			"operator": "EQUALS", "value": { "farming": 5}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:necrotic_bone",	"operator": "EQUALS", "value": { "farming": 5}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:iron",			"operator": "EQUALS", "value": { "farming": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:seared_stone",	"operator": "EQUALS", "value": { "farming": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:scorched_stone",	"operator": "EQUALS", "value": { "farming": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:copper",			"operator": "EQUALS", "value": { "farming": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:slimewood",		"operator": "EQUALS", "value": { "farming": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:lead",			"operator": "EQUALS", "value": { "farming": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:silver",			"operator": "EQUALS", "value": { "farming": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:slimesteel",		"operator": "EQUALS", "value": { "farming": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:steel",			"operator": "EQUALS", "value": { "farming": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:bronze",			"operator": "EQUALS", "value": { "farming": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:tinkers_bronze",	"operator": "EQUALS", "value": { "farming": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:nahuatl",			"operator": "EQUALS", "value": { "farming": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:pig_iron",		"operator": "EQUALS", "value": { "farming": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:rose_gold",		"operator": "EQUALS", "value": { "farming": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:constantan",		"operator": "EQUALS", "value": { "farming": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:electrum",		"operator": "EQUALS", "value": { "farming": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:cobalt",			"operator": "EQUALS", "value": { "farming": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:queens_slime",	"operator": "EQUALS", "value": { "farming": 30}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:hepatizon",		"operator": "EQUALS", "value": { "farming": 30}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:manyullyn",		"operator": "EQUALS", "value": { "farming": 30}}
-			 ]}
+			 	{"paths": ["tic_materials[]"],
+			 	 "criteria": [
+			 	 	{"operator": "EQUALS","comparators": ["tconstruct:necrotic_bone","tconstruct:bone","tconstruct:flint","tconstruct:stone","tconstruct:wood"],"value": { "farming": 1}},
+					{"operator": "EQUALS","comparators": ["tconstruct:iron","tconstruct:seared_stone","tconstruct:scorched_stone","tconstruct:copper","tconstruct:slimewood","tconstruct:lead","tconstruct:silver","tconstruct:electrum"], "value": { "farming": 10}},
+					{"operator": "EQUALS","comparators": ["tconstruct:slimesteel","tconstruct:steel","tconstruct:bronze","tconstruct:tinkers_bronze","tconstruct:nahuatl","tconstruct:pig_iron","tconstruct:rose_gold","tconstruct:constantan","tconstruct:cobalt"],"value": { "farming": 20}},
+					{"operator": "EQUALS","comparators": ["tconstruct:queens_slime","tconstruct:hepatizon","tconstruct:manyullyn"],"value": { "farming": 30}}
+			 	]}
+			]}
 		]
 	},
 	"tconstruct:scythe": {
 		"logic": [
 			{"behavior_to_previous": "ADD_TO", "should_cases_add": false,
 			 "cases": [
-			 	{"path": "tic_materials[]", "comparator": "tconstruct:wood",			"operator": "EQUALS", "value": { "farming": 1}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:stone",			"operator": "EQUALS", "value": { "farming": 5}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:flint",			"operator": "EQUALS", "value": { "farming": 5}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:bone",			"operator": "EQUALS", "value": { "farming": 5}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:necrotic_bone",	"operator": "EQUALS", "value": { "farming": 5}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:iron",			"operator": "EQUALS", "value": { "farming": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:seared_stone",	"operator": "EQUALS", "value": { "farming": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:scorched_stone",	"operator": "EQUALS", "value": { "farming": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:copper",			"operator": "EQUALS", "value": { "farming": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:slimewood",		"operator": "EQUALS", "value": { "farming": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:lead",			"operator": "EQUALS", "value": { "farming": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:silver",			"operator": "EQUALS", "value": { "farming": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:slimesteel",		"operator": "EQUALS", "value": { "farming": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:steel",			"operator": "EQUALS", "value": { "farming": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:bronze",			"operator": "EQUALS", "value": { "farming": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:tinkers_bronze",	"operator": "EQUALS", "value": { "farming": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:nahuatl",			"operator": "EQUALS", "value": { "farming": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:pig_iron",		"operator": "EQUALS", "value": { "farming": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:rose_gold",		"operator": "EQUALS", "value": { "farming": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:constantan",		"operator": "EQUALS", "value": { "farming": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:electrum",		"operator": "EQUALS", "value": { "farming": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:cobalt",			"operator": "EQUALS", "value": { "farming": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:queens_slime",	"operator": "EQUALS", "value": { "farming": 30}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:hepatizon",		"operator": "EQUALS", "value": { "farming": 30}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:manyullyn",		"operator": "EQUALS", "value": { "farming": 30}}
-			 ]}
+			 	{"paths": ["tic_materials[]"],
+			 	 "criteria": [
+			 	 	{"operator": "EQUALS","comparators": ["tconstruct:necrotic_bone","tconstruct:bone","tconstruct:flint","tconstruct:stone","tconstruct:wood"],"value": { "farming": 1}},
+					{"operator": "EQUALS","comparators": ["tconstruct:iron","tconstruct:seared_stone","tconstruct:scorched_stone","tconstruct:copper","tconstruct:slimewood","tconstruct:lead","tconstruct:silver","tconstruct:electrum"], "value": { "farming": 10}},
+					{"operator": "EQUALS","comparators": ["tconstruct:slimesteel","tconstruct:steel","tconstruct:bronze","tconstruct:tinkers_bronze","tconstruct:nahuatl","tconstruct:pig_iron","tconstruct:rose_gold","tconstruct:constantan","tconstruct:cobalt"],"value": { "farming": 20}},
+					{"operator": "EQUALS","comparators": ["tconstruct:queens_slime","tconstruct:hepatizon","tconstruct:manyullyn"],"value": { "farming": 30}}
+			 	]}
+			]}
 		]
 	},
 	"tconstruct:broad_sword": {
 		"logic": [
 			{"behavior_to_previous": "ADD_TO", "should_cases_add": false,
 			 "cases": [
-			 	{"path": "tic_materials[]", "comparator": "tconstruct:wood",			"operator": "EQUALS", "value": { "combat": 1}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:stone",			"operator": "EQUALS", "value": { "combat": 5}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:flint",			"operator": "EQUALS", "value": { "combat": 5}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:bone",			"operator": "EQUALS", "value": { "combat": 5}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:necrotic_bone",	"operator": "EQUALS", "value": { "combat": 5}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:iron",			"operator": "EQUALS", "value": { "combat": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:seared_stone",	"operator": "EQUALS", "value": { "combat": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:scorched_stone",	"operator": "EQUALS", "value": { "combat": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:copper",			"operator": "EQUALS", "value": { "combat": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:slimewood",		"operator": "EQUALS", "value": { "combat": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:lead",			"operator": "EQUALS", "value": { "combat": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:silver",			"operator": "EQUALS", "value": { "combat": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:slimesteel",		"operator": "EQUALS", "value": { "combat": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:steel",			"operator": "EQUALS", "value": { "combat": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:bronze",			"operator": "EQUALS", "value": { "combat": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:tinkers_bronze",	"operator": "EQUALS", "value": { "combat": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:nahuatl",			"operator": "EQUALS", "value": { "combat": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:pig_iron",		"operator": "EQUALS", "value": { "combat": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:rose_gold",		"operator": "EQUALS", "value": { "combat": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:constantan",		"operator": "EQUALS", "value": { "combat": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:electrum",		"operator": "EQUALS", "value": { "combat": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:cobalt",			"operator": "EQUALS", "value": { "combat": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:queens_slime",	"operator": "EQUALS", "value": { "combat": 30}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:hepatizon",		"operator": "EQUALS", "value": { "combat": 30}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:manyullyn",		"operator": "EQUALS", "value": { "combat": 30}}
-			 ]}
+			 	{"paths": ["tic_materials[]"],
+			 	 "criteria": [
+			 	 	{"operator": "EQUALS","comparators": ["tconstruct:necrotic_bone","tconstruct:bone","tconstruct:flint","tconstruct:stone","tconstruct:wood"],"value": { "combat": 1}},
+					{"operator": "EQUALS","comparators": ["tconstruct:iron","tconstruct:seared_stone","tconstruct:scorched_stone","tconstruct:copper","tconstruct:slimewood","tconstruct:lead","tconstruct:silver","tconstruct:electrum"], "value": { "combat": 10}},
+					{"operator": "EQUALS","comparators": ["tconstruct:slimesteel","tconstruct:steel","tconstruct:bronze","tconstruct:tinkers_bronze","tconstruct:nahuatl","tconstruct:pig_iron","tconstruct:rose_gold","tconstruct:constantan","tconstruct:cobalt"],"value": { "combat": 20}},
+					{"operator": "EQUALS","comparators": ["tconstruct:queens_slime","tconstruct:hepatizon","tconstruct:manyullyn"],"value": { "combat": 30}}
+			 	]}
+			]}
 		]
 	},
 	"tconstruct:cleaver": {
 		"logic": [
 			{"behavior_to_previous": "ADD_TO", "should_cases_add": false,
 			 "cases": [
-			 	{"path": "tic_materials[]", "comparator": "tconstruct:wood",			"operator": "EQUALS", "value": { "combat": 1}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:stone",			"operator": "EQUALS", "value": { "combat": 5}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:flint",			"operator": "EQUALS", "value": { "combat": 5}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:bone",			"operator": "EQUALS", "value": { "combat": 5}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:necrotic_bone",	"operator": "EQUALS", "value": { "combat": 5}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:iron",			"operator": "EQUALS", "value": { "combat": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:seared_stone",	"operator": "EQUALS", "value": { "combat": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:scorched_stone",	"operator": "EQUALS", "value": { "combat": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:copper",			"operator": "EQUALS", "value": { "combat": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:slimewood",		"operator": "EQUALS", "value": { "combat": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:lead",			"operator": "EQUALS", "value": { "combat": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:silver",			"operator": "EQUALS", "value": { "combat": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:slimesteel",		"operator": "EQUALS", "value": { "combat": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:steel",			"operator": "EQUALS", "value": { "combat": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:bronze",			"operator": "EQUALS", "value": { "combat": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:tinkers_bronze",	"operator": "EQUALS", "value": { "combat": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:nahuatl",			"operator": "EQUALS", "value": { "combat": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:pig_iron",		"operator": "EQUALS", "value": { "combat": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:rose_gold",		"operator": "EQUALS", "value": { "combat": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:constantan",		"operator": "EQUALS", "value": { "combat": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:electrum",		"operator": "EQUALS", "value": { "combat": 10}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:cobalt",			"operator": "EQUALS", "value": { "combat": 20}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:queens_slime",	"operator": "EQUALS", "value": { "combat": 30}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:hepatizon",		"operator": "EQUALS", "value": { "combat": 30}},
-				{"path": "tic_materials[]", "comparator": "tconstruct:manyullyn",		"operator": "EQUALS", "value": { "combat": 30}}
-			 ]}
+			 	{"paths": ["tic_materials[]"],
+			 	 "criteria": [
+			 	 	{"operator": "EQUALS","comparators": ["tconstruct:necrotic_bone","tconstruct:bone","tconstruct:flint","tconstruct:stone","tconstruct:wood"],"value": { "combat": 1}},
+					{"operator": "EQUALS","comparators": ["tconstruct:iron","tconstruct:seared_stone","tconstruct:scorched_stone","tconstruct:copper","tconstruct:slimewood","tconstruct:lead","tconstruct:silver","tconstruct:electrum"], "value": { "combat": 10}},
+					{"operator": "EQUALS","comparators": ["tconstruct:slimesteel","tconstruct:steel","tconstruct:bronze","tconstruct:tinkers_bronze","tconstruct:nahuatl","tconstruct:pig_iron","tconstruct:rose_gold","tconstruct:constantan","tconstruct:cobalt"],"value": { "combat": 20}},
+					{"operator": "EQUALS","comparators": ["tconstruct:queens_slime","tconstruct:hepatizon","tconstruct:manyullyn"],"value": { "combat": 30}}
+			 	]}
+			]}
 		]
 	},
-	"silentgear:pickaxe": {
+	"silentgear:axe": {
 		"logic": [
 			{"behavior_to_previous": "ADD_TO", "should_cases_add": false,
 			 "cases": [
-			 	{"path":"#sgpick", "operator": "EQUALS","comparator": "silentgear:wood",		"value": {"mining": 1}},
-				{"path":"#sgpick", "operator": "EQUALS","comparator": "silentgear:iron",		"value": {"mining": 10}},
-				{"path":"#sgpick", "operator": "EQUALS","comparator": "silentgear:tyrian_steel","value": {"mining": 20}},
-				{"path":"#sgpick", "operator": "EQUALS","comparator": "silentgear:emerald",		"value": {"mining": 20}}
+			 	{"paths":["#sgpick"],
+			 	 "criteria": [
+			 	 	{"operator": "EQUALS","comparators": ["silentgear:wood"],		"value": {"mining": 1}},
+					{"operator": "EQUALS","comparators": ["silentgear:iron"],		"value": {"mining": 10}},
+					{"operator": "EQUALS","comparators": ["silentgear:tyrian_steel"],"value": {"mining": 20}},
+					{"operator": "EQUALS","comparators": ["silentgear:emerald"],	"value": {"mining": 20}}
+				]}
 			]}
 		]
 	},
@@ -312,7 +153,112 @@
 		"logic": [
 			{"behavior_to_previous": "ADD_TO", "should_cases_add": false,
 			 "cases": [
-			 
+			 	{"paths":["id"], 
+			 	"criteria":[
+			 		{"operator":"EXISTS","value":{"agility":1}}
+			 	]}
+			 ]
+			},
+			{"behavior_to_previous": "REPLACE", "should_cases_add": false,
+			 "cases": [
+			 	{"paths":["double/basic_pickaxe_left_material","double/basic_pickaxe_right_material"],
+			 	 "criteria":[
+			 	 	{"operator": "EQUALS","comparators": ["basic_pickaxe/oak","basic_pickaxe/birch","basic_pickaxe/acacia","basic_pickaxe/jungle","basic_pickaxe/spruce","basic_pickaxe/dark_oak"],"value": {"mining": 1}},
+			 	 	{"operator": "EQUALS","comparators": ["basic_pickaxe/stone"],"value": {"mining": 5}},
+			 	 	{"operator": "EQUALS","comparators": ["basic_pickaxe/andesite","basic_pickaxe/diorite","basic_pickaxe/granite"],"value": {"mining": 8}},
+			 	 	{"operator": "EQUALS","comparators": ["basic_pickaxe/flint"],"value": {"mining": 10}},
+			 	 	{"operator": "EQUALS","comparators": ["basic_pickaxe/iron"],"value": {"mining": 12}},
+			 	 	{"operator": "EQUALS","comparators": ["basic_pickaxe/gold"],"value": {"mining": 15}},
+			 	 	{"operator": "EQUALS","comparators": ["basic_pickaxe/blackstone","basic_pickaxe/obsidian"],"value": {"mining": 25}},
+			 	 	{"operator": "EQUALS","comparators": ["basic_pickaxe/netherite"],"value": {"mining": 50}},
+			 	 	{"operator": "EQUALS","comparators": ["basic_pickaxe/emerald"],"value": {"mining": 40}},
+			 	 	{"operator": "EQUALS","comparators": ["basic_pickaxe/diamond"],"value": {"mining": 45}}
+			 	 ]
+			 	},
+			 	{"paths":["double/basic_axe_left_material","double/basic_axe_right_material"],
+			 	 "criteria":[
+			 	 	{"operator": "EQUALS","comparators": ["basic_axe/oak","basic_axe/birch","basic_axe/acacia","basic_axe/jungle","basic_axe/spruce","basic_axe/dark_oak"],"value": {"woodcutting": 1}},
+			 	 	{"operator": "EQUALS","comparators": ["basic_axe/stone"],"value": {"woodcutting": 5}},
+			 	 	{"operator": "EQUALS","comparators": ["basic_axe/andesite","basic_axe/diorite","basic_axe/granite"],"value": {"woodcutting": 8}},
+			 	 	{"operator": "EQUALS","comparators": ["basic_axe/flint"],"value": {"woodcutting": 10}},
+			 	 	{"operator": "EQUALS","comparators": ["basic_axe/iron"],"value": {"woodcutting": 12}},
+			 	 	{"operator": "EQUALS","comparators": ["basic_axe/gold"],"value": {"woodcutting": 15}},
+			 	 	{"operator": "EQUALS","comparators": ["basic_axe/blackstone","basic_axe/obsidian"],"value": {"woodcutting": 25}},
+			 	 	{"operator": "EQUALS","comparators": ["basic_axe/netherite"],"value": {"woodcutting": 50}},
+			 	 	{"operator": "EQUALS","comparators": ["basic_axe/emerald"],"value": {"woodcutting": 40}},
+			 	 	{"operator": "EQUALS","comparators": ["basic_axe/diamond"],"value": {"woodcutting": 45}}
+			 	 ]
+			 	},
+			 	{"paths":["double/basic_hammer_left_material","double/basic_hammer_right_material"],
+			 	 "criteria":[
+			 	 	{"operator": "EQUALS","comparators": ["basic_hammer/oak","basic_hammer/birch","basic_hammer/acacia","basic_hammer/jungle","basic_hammer/spruce","basic_hammer/dark_oak"],"value": {"crafting": 1}},
+			 	 	{"operator": "EQUALS","comparators": ["basic_hammer/stone"],"value": {"crafting": 5}},
+			 	 	{"operator": "EQUALS","comparators": ["basic_hammer/andesite","basic_hammer/diorite","basic_hammer/granite"],"value": {"crafting": 8}},
+			 	 	{"operator": "EQUALS","comparators": ["basic_hammer/flint"],"value": {"crafting": 10}},
+			 	 	{"operator": "EQUALS","comparators": ["basic_hammer/iron"],"value": {"crafting": 12}},
+			 	 	{"operator": "EQUALS","comparators": ["basic_hammer/gold"],"value": {"crafting": 15}},
+			 	 	{"operator": "EQUALS","comparators": ["basic_hammer/blackstone","basic_hammer/obsidian"],"value": {"crafting": 25}},
+			 	 	{"operator": "EQUALS","comparators": ["basic_hammer/netherite"],"value": {"crafting": 50}},
+			 	 	{"operator": "EQUALS","comparators": ["basic_hammer/emerald"],"value": {"crafting": 40}},
+			 	 	{"operator": "EQUALS","comparators": ["basic_hammer/diamond"],"value": {"crafting": 45}}
+			 	 ]
+			 	},
+			 	{"paths":["double/claw_left_material","double/claw_right_material"],
+			 	 "criteria":[
+			 	 	{"operator": "EQUALS","comparators": ["claw/oak","claw/birch","claw/acacia","claw/jungle","claw/spruce","claw/dark_oak"],"value": {"crafting": 1}},
+			 	 	{"operator": "EQUALS","comparators": ["claw/stone"],"value": {"crafting": 5}},
+			 	 	{"operator": "EQUALS","comparators": ["claw/andesite","claw/diorite","claw/granite"],"value": {"crafting": 8}},
+			 	 	{"operator": "EQUALS","comparators": ["claw/flint"],"value": {"crafting": 10}},
+			 	 	{"operator": "EQUALS","comparators": ["claw/iron"],"value": {"crafting": 12}},
+			 	 	{"operator": "EQUALS","comparators": ["claw/gold"],"value": {"crafting": 15}},
+			 	 	{"operator": "EQUALS","comparators": ["claw/blackstone","claw/obsidian"],"value": {"crafting": 25}},
+			 	 	{"operator": "EQUALS","comparators": ["claw/netherite"],"value": {"crafting": 50}},
+			 	 	{"operator": "EQUALS","comparators": ["claw/emerald"],"value": {"crafting": 40}},
+			 	 	{"operator": "EQUALS","comparators": ["claw/diamond"],"value": {"crafting": 45}}
+			 	 ]
+			 	},
+			 	{"paths":["double/adze_left_material","double/adze_right_material"],
+			 	 "criteria":[
+			 	 	{"operator": "EQUALS","comparators": ["adze/oak","adze/birch","adze/acacia","adze/jungle","adze/spruce","adze/dark_oak"],"value": {"excavation": 1}},
+			 	 	{"operator": "EQUALS","comparators": ["adze/stone"],"value": {"excavation": 5}},
+			 	 	{"operator": "EQUALS","comparators": ["adze/andesite","adze/diorite","adze/granite"],"value": {"excavation": 8}},
+			 	 	{"operator": "EQUALS","comparators": ["adze/flint"],"value": {"excavation": 10}},
+			 	 	{"operator": "EQUALS","comparators": ["adze/iron"],"value": {"excavation": 12}},
+			 	 	{"operator": "EQUALS","comparators": ["adze/gold"],"value": {"excavation": 15}},
+			 	 	{"operator": "EQUALS","comparators": ["adze/blackstone","adze/obsidian"],"value": {"excavation": 25}},
+			 	 	{"operator": "EQUALS","comparators": ["adze/netherite"],"value": {"excavation": 50}},
+			 	 	{"operator": "EQUALS","comparators": ["adze/emerald"],"value": {"excavation": 40}},
+			 	 	{"operator": "EQUALS","comparators": ["adze/diamond"],"value": {"excavation": 45}}
+			 	 ]
+			 	},
+			 	{"paths":["double/butt_left_material","double/butt_right_material"],
+			 	 "criteria":[
+			 	 	{"operator": "EQUALS","comparators": ["butt/oak","butt/birch","butt/acacia","butt/jungle","butt/spruce","butt/dark_oak"],"value": {"woodcutting": 1}},
+			 	 	{"operator": "EQUALS","comparators": ["butt/stone"],"value": {"woodcutting": 5}},
+			 	 	{"operator": "EQUALS","comparators": ["butt/andesite","butt/diorite","butt/granite"],"value": {"woodcutting": 8}},
+			 	 	{"operator": "EQUALS","comparators": ["butt/flint"],"value": {"woodcutting": 10}},
+			 	 	{"operator": "EQUALS","comparators": ["butt/iron"],"value": {"woodcutting": 12}},
+			 	 	{"operator": "EQUALS","comparators": ["butt/gold"],"value": {"woodcutting": 15}},
+			 	 	{"operator": "EQUALS","comparators": ["butt/blackstone","butt/obsidian"],"value": {"woodcutting": 25}},
+			 	 	{"operator": "EQUALS","comparators": ["butt/netherite"],"value": {"woodcutting": 50}},
+			 	 	{"operator": "EQUALS","comparators": ["butt/emerald"],"value": {"woodcutting": 40}},
+			 	 	{"operator": "EQUALS","comparators": ["butt/diamond"],"value": {"woodcutting": 45}}
+			 	 ]
+			 	},
+			 	{"paths":["double/hoe_left_material","double/hoe_right_material"],
+			 	 "criteria":[
+			 	 	{"operator": "EQUALS","comparators": ["hoe/oak","hoe/birch","hoe/acacia","hoe/jungle","hoe/spruce","hoe/dark_oak"],"value": {"farming": 1}},
+			 	 	{"operator": "EQUALS","comparators": ["hoe/stone"],"value": {"farming": 5}},
+			 	 	{"operator": "EQUALS","comparators": ["hoe/andesite","hoe/diorite","hoe/granite"],"value": {"farming": 8}},
+			 	 	{"operator": "EQUALS","comparators": ["hoe/flint"],"value": {"farming": 10}},
+			 	 	{"operator": "EQUALS","comparators": ["hoe/iron"],"value": {"farming": 12}},
+			 	 	{"operator": "EQUALS","comparators": ["hoe/gold"],"value": {"farming": 15}},
+			 	 	{"operator": "EQUALS","comparators": ["hoe/blackstone","hoe/obsidian"],"value": {"farming": 25}},
+			 	 	{"operator": "EQUALS","comparators": ["hoe/netherite"],"value": {"farming": 50}},
+			 	 	{"operator": "EQUALS","comparators": ["hoe/emerald"],"value": {"farming": 40}},
+			 	 	{"operator": "EQUALS","comparators": ["hoe/diamond"],"value": {"farming": 45}}
+			 	 ]
+			 	}
 			]}
 		]
 	}

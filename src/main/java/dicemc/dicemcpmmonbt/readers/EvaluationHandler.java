@@ -17,6 +17,7 @@ public class EvaluationHandler {
 	//entry point
 	public static Map<String, Double> evaluateEntries(JsonArray logic, CompoundNBT nbt, JsonObject globals) {
 		Map<String, Double> map = new HashMap<>();		
+		try {
 		//cancels evaluation if NBT has no data
 		if (nbt.isEmpty() || nbt == null) return map;
 		//this section cycles through the logic and generates usable result objects
@@ -76,23 +77,36 @@ public class EvaluationHandler {
 			}
 			}
 		}
-		
+		}
+		catch (NullPointerException e) {e.printStackTrace();}
 		return map;
+		
 	}
 	
 	private static List<Result> processCases(JsonArray cases, CompoundNBT nbt, JsonObject globals) {
 		List<Result> results = new ArrayList<>();
 		for (int i = 0; i < cases.size(); i++) {
-			JsonObject pred = cases.get(i).getAsJsonObject();
-			String operator = pred.get("operator").getAsString();
-			JsonObject values = pred.get("value").getAsJsonObject();
-			String comparator = "";
-			if (!operator.equalsIgnoreCase("EXISTS"))
-				comparator = pred.get("comparator").getAsString();
-			//TODO find a way to use multiple "paths":["path1","path2"]
-			List<String> comparison = PathReader.getNBTValues(getPathOrGlobal(globals, pred.get("path").getAsString()), nbt); 
-			for (int j = 0; j < comparison.size(); j++) {
-				results.add(new Result(operator, comparator, values, comparison.get(j)));
+			JsonObject caseIterant = cases.get(i).getAsJsonObject();
+			JsonArray paths = caseIterant.get("paths").getAsJsonArray();
+			JsonArray criteria = caseIterant.get("criteria").getAsJsonArray();
+			for (int p = 0; p < paths.size(); p++) {
+				for (int c = 0; c < criteria.size(); c++) {
+					JsonObject critObj = criteria.get(c).getAsJsonObject();
+					JsonObject values = critObj.get("value").getAsJsonObject();
+					String operator = critObj.get("operator").getAsString();					
+					List<String> comparison = PathReader.getNBTValues(getPathOrGlobal(globals, paths.get(p).getAsString()), nbt);
+					for (int j = 0; j < comparison.size(); j++) {
+						JsonArray comparators = new JsonArray();
+						if (!operator.equalsIgnoreCase("EXISTS")) {
+							comparators = critObj.get("comparators").getAsJsonArray();
+							for (int l = 0; l < comparators.size(); l++) {
+								results.add(new Result(operator, comparators.get(l).getAsString(), values, comparison.get(j)));
+							}
+						}
+						else results.add(new Result(operator, "", values, comparison.get(j)));
+					}
+					
+				}
 			}
 		}
 		return results;

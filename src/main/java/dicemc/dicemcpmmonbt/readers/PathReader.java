@@ -6,6 +6,7 @@ import java.util.List;
 import com.mojang.brigadier.StringReader;
 
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
 
 public class PathReader {
@@ -55,7 +56,9 @@ public class PathReader {
 			list.addAll(evaluateCompound(nodes, nbt.getCompound(rawNode(nodeEntry))));
 		}
 		else {
-			list.add(nbt.get(rawNode(nodeEntry)).getAsString());
+			INBT value = nbt.get(rawNode(nodeEntry));
+			if (value != null)
+				list.add(value.getAsString());
 		}
 		
 		return list;
