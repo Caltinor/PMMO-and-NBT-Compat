@@ -89,7 +89,7 @@ public class PMMONBT
     		for (Map.Entry<ResourceLocation, JsonObject> map : base.getValue().entrySet()) {
     			if (jType.equals(JType.REQ_WEAR) || jType.equals(JType.REQ_TOOL) || jType.equals(JType.REQ_WEAPON) ||
     					jType.equals(JType.REQ_USE) || jType.equals(JType.REQ_PLACE) ||	jType.equals(JType.REQ_KILL) || 
-    					jType.equals(JType.REQ_CRAFT)) {
+    					jType.equals(JType.REQ_CRAFT) || jType.equals(JType.XP_BONUS_WORN) || jType.equals(JType.XP_BONUS_HELD)) {
 	    			Predicate<PlayerEntity> pred = player -> (ReqChecker.checkNBTReq(player, map.getKey(), jType));
 	    			PredicateRegistry.registerPredicate(map.getKey(), jType, pred);
 	    			Function<ItemStack, Map<String, Double>> func = stack -> (ReqChecker.getNBTReqs(jType, stack));
@@ -126,14 +126,24 @@ public class PMMONBT
     
     private void initData() {
     	String fileName;
+    	File dataFile;
     	for (int i = JType.REQ_WEAR.getValue(); i < JType.XP_VALUE_GROW.getValue(); i++) {
     		if (i == JType.REQ_USE_ENCHANTMENT.getValue() || i == JType.XP_VALUE_TRIGGER.getValue() || i == JType.REQ_BIOME.getValue()) 
     			continue;
     		fileName = JType.values()[i].name().toLowerCase() + "_nbt.json";
-    		File dataFile = FMLPaths.CONFIGDIR.get().resolve( "pmmo/" + fileName ).toFile();
+    		dataFile = FMLPaths.CONFIGDIR.get().resolve( "pmmo/" + fileName ).toFile();
     		if (!dataFile.exists())
     			createData(dataFile, fileName);
     	}
+    	//worn and held jtypes
+    	fileName = JType.XP_BONUS_WORN.name().toLowerCase() + "_nbt.json";
+		dataFile = FMLPaths.CONFIGDIR.get().resolve( "pmmo/" + fileName ).toFile();
+		if (!dataFile.exists())
+			createData(dataFile, fileName);
+		fileName = JType.XP_BONUS_HELD.name().toLowerCase() + "_nbt.json";
+		dataFile = FMLPaths.CONFIGDIR.get().resolve( "pmmo/" + fileName ).toFile();
+		if (!dataFile.exists())
+			createData(dataFile, fileName);
     }
     
     private void createData( File dataFile, String fileName )

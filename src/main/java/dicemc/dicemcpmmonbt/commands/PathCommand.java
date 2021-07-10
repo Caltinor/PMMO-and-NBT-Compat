@@ -1,7 +1,6 @@
 package dicemc.dicemcpmmonbt.commands;
 
 import java.util.List;
-
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -15,12 +14,12 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.StringTextComponent;
 
 public class PathCommand implements Command<CommandSource>{
-	private static final PathCommand CMD = new PathCommand();
+	public static final PathCommand CMD = new PathCommand();
 	
 	public static void register(CommandDispatcher<CommandSource> dispatcher) {
 		dispatcher.register(Commands.literal("nbtpath")
-				.then(Commands.argument("path", StringArgumentType.greedyString()))
-				.executes(CMD));
+				.then(Commands.argument("path", StringArgumentType.greedyString())
+						.executes(CMD)));
 	}
 
 	@Override

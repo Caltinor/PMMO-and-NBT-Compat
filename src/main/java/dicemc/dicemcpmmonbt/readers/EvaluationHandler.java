@@ -2,13 +2,10 @@ package dicemc.dicemcpmmonbt.readers;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.mojang.datafixers.util.Pair;
-
 import dicemc.dicemcpmmonbt.Result;
 import net.minecraft.nbt.CompoundNBT;
 
@@ -21,21 +18,20 @@ public class EvaluationHandler {
 		//cancels evaluation if NBT has no data
 		if (nbt.isEmpty() || nbt == null) return map;
 		//this section cycles through the logic and generates usable result objects
-		LinkedHashMap<Pair<String, Boolean>, List<Result>> logicMap = new LinkedHashMap<>();
+		List<LogicTier> logicSequence = new ArrayList<>();
 		for (int i = 0; i < logic.size(); i++) {
 			JsonObject logicValue = logic.get(i).getAsJsonObject();
 			String relationToHigher = logicValue.get("behavior_to_previous").getAsString();
 			boolean summative = logicValue.get("should_cases_add").getAsBoolean();
 			JsonArray pred = logicValue.get("cases").getAsJsonArray();
-			logicMap.put(Pair.of(relationToHigher, summative), processCases(pred, nbt, globals));
+			logicSequence.add(new LogicTier(relationToHigher, summative, processCases(pred, nbt, globals)));
 		}
 		//This section iterates through the logical tiers and processes the summative attribute
 		List<Map<String, Double>> interMap = new ArrayList<>();
-		List<Pair<String, Boolean>> keys = new ArrayList<>(logicMap.keySet());
-		for (int i = 0; i < keys.size(); i++) {
+		for (int i = 0; i < logicSequence.size(); i++) {
 			Map<String, Double> combinedMap = new HashMap<>();
-			List<Result> data = logicMap.get(keys.get(i));
-			boolean isSummative = keys.get(i).getSecond();
+			List<Result> data = logicSequence.get(i).results;
+			boolean isSummative = logicSequence.get(i).isSummative;
 			for (Result r : data) {
 				if (r == null) continue;
 				if (!r.compares()) continue;
@@ -49,17 +45,13 @@ public class EvaluationHandler {
 			interMap.add(combinedMap);
 		}
 		//this section iterates through the logical tiers and processes the relational attribute
-		for (int i = 0; i < keys.size(); i++) {
-			switch (keys.get(i).getFirst()) {
-			default: case "ADD_TO": {
-				for (Map.Entry<String, Double> value : interMap.get(i).entrySet()) {
-					map.merge(value.getKey(), value.getValue(), (oldValue, newValue) -> oldValue + newValue);
-				}
-				break;
-			}
+		for (int i = 0; i < logicSequence.size(); i++) {
+			switch (logicSequence.get(i).relationToHigher) {
 			case "SUB_FROM": {
 				for (Map.Entry<String, Double> value : interMap.get(i).entrySet()) {
-					map.merge(value.getKey(), value.getValue(), (oldValue, newValue) -> Math.max(0, oldValue - newValue));
+					if (map.getOrDefault(value.getKey(), 0d) - value.getValue() <= 0) map.remove(value.getKey());
+					else 
+						map.merge(value.getKey(), value.getValue(), (oldValue, newValue) -> oldValue - newValue);
 				}
 				break;
 			}
@@ -75,10 +67,17 @@ public class EvaluationHandler {
 				}
 				break;
 			}
+			case "ADD_TO": default:{
+				for (Map.Entry<String, Double> value : interMap.get(i).entrySet()) {
+					map.merge(value.getKey(), value.getValue(), (oldValue, newValue) -> oldValue + newValue);
+				}
+				break;
+			}
 			}
 		}
 		}
 		catch (NullPointerException e) {e.printStackTrace();}
+		catch (IndexOutOfBoundsException e) {e.printStackTrace();}
 		return map;
 		
 	}
@@ -112,9 +111,21 @@ public class EvaluationHandler {
 		return results;
 	}
 	
-	private static String getPathOrGlobal(JsonObject globals, String key) {
+	public static String getPathOrGlobal(JsonObject globals, String key) {
 		//Note, local paths and constants will not be in this iteration
 		return key.contains("#") ? globals.get("paths").getAsJsonObject().get(key.replace("#", "")).getAsString() : key;
+	}
+	
+	protected static class LogicTier {
+		public String relationToHigher;
+		public boolean isSummative;
+		public List<Result> results;
+		
+		public LogicTier(String relationToHigher, boolean isSummative, List<Result> results) {
+			this.relationToHigher = relationToHigher;
+			this.isSummative = isSummative;
+			this.results = results;
+		}
 	}
 
 }

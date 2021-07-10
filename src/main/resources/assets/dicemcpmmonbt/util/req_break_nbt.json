@@ -1,4 +1,6 @@
 {
+
+	"global":{"paths":{},"constants":{}},
 	"examplemod:exampleitem": {
 		"item": {
 			"summative": false,

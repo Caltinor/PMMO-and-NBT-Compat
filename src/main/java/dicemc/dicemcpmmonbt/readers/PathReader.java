@@ -47,12 +47,13 @@ public class PathReader {
 		List<String> list = new ArrayList<>();
 		if (nbt.isEmpty() || nbt == null) return list;
 		String nodeEntry = nodes.get(0);
-		nodes.remove(0);
 		
-		if (isList(nodeEntry)) {		
+		if (isList(nodeEntry)) {	
+			nodes.remove(0);
 			list.addAll(evaluateList(nodes, nodeEntry, (ListNBT) nbt.get(rawNode(nodeEntry))));
 		}
 		else if (isCompound(nodeEntry)) {
+			nodes.remove(0);
 			list.addAll(evaluateCompound(nodes, nbt.getCompound(rawNode(nodeEntry))));
 		}
 		else {
@@ -72,17 +73,17 @@ public class PathReader {
 		if (index < -1 || index >= lnbt.size()) return list;
 		if (index == -1) {
 			for (int l = 0; l < lnbt.size(); l++) {
-				if (lnbt.get(0) instanceof CompoundNBT) {					
-					list.addAll(evaluateCompound(nodes, lnbt.getCompound(l)));
+				if (lnbt.get(0) instanceof CompoundNBT) {	
+					list.addAll(evaluateCompound(new ArrayList<>(nodes), lnbt.getCompound(l)));
 				}
 				else if (lnbt.get(0) instanceof ListNBT) {
-					list.addAll(evaluateList(nodes, getListParameters(nodes.get(0)), lnbt.getList(l)));
+					list.addAll(evaluateList(new ArrayList<>(nodes), getListParameters(nodes.get(0)), lnbt.getList(l)));
 				}
 				else list.add(lnbt.get(l).getAsString());
 			}
 		}
 		else {
-			if (lnbt.get(0) instanceof CompoundNBT) {					
+			if (lnbt.get(0) instanceof CompoundNBT) {
 				list.addAll(evaluateCompound(nodes, lnbt.getCompound(index)));
 			}
 			else if (lnbt.get(0) instanceof ListNBT) {
