@@ -32,6 +32,6 @@ A compatibility mod for PMMO that allows for the assignment of skill requirement
 [[dependencies.pmmo]]
 	modId="pmmo"
 	mandatory=true
-	versionRange="[1.16.5-3.53,1.17)"
+	versionRange="[1.16.5-3.61,1.17)"
 	ordering="NONE"
 	side="BOTH"
