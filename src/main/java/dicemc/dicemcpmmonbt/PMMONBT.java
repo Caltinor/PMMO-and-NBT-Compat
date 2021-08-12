@@ -8,6 +8,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -36,7 +37,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -72,8 +76,25 @@ public class PMMONBT
     @SuppressWarnings("resource")
 	@SubscribeEvent
     public void onPlayerJoin(PlayerLoggedInEvent event) {
-    	if (!event.getPlayer().getCommandSenderWorld().isClientSide)
-    		Networking.sendToClient(new PacketSync(ReqChecker.src), (ServerPlayerEntity) event.getPlayer());
+    	if (!event.getPlayer().getCommandSenderWorld().isClientSide && event.getPlayer() instanceof ServerPlayerEntity)
+    		loginQueue.put((ServerPlayerEntity) event.getPlayer(), System.currentTimeMillis()+15000);
+    }
+    
+    private Map<ServerPlayerEntity, Long> loginQueue = new ConcurrentHashMap<>();
+    @SubscribeEvent
+    public void onWorldTick(TickEvent.WorldTickEvent event) {
+    	if (!event.world.isClientSide) {
+	    	List<ServerPlayerEntity> outQueue = new ArrayList<>();
+	    	for (Map.Entry<ServerPlayerEntity, Long> map : loginQueue.entrySet()) {
+	    		if (map.getValue() < System.currentTimeMillis()) 
+	    			outQueue.add(map.getKey());
+	    	}
+	    	for (ServerPlayerEntity player : outQueue) {
+	    		System.out.println("sending update packet to client");
+	    		Networking.sendToClient(new PacketSync(ReqChecker.src), player);
+	    		loginQueue.remove(player);
+	    	}
+    	}
     }
     
     @SubscribeEvent
