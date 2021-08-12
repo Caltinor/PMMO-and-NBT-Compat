@@ -8,9 +8,10 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
@@ -36,7 +37,7 @@ public class JsonParser {
 
         for( JType jType : JType.values())
         {
-        	Map<ResourceLocation, JsonObject> map = new HashMap<>();
+        	Map<ResourceLocation, JsonObject> map = new ConcurrentHashMap<>();
             fileName = jType.name().toLowerCase() + "_nbt.json";
             file = FMLPaths.CONFIGDIR.get().resolve( dataPath + fileName ).toFile();
             if (!file.exists()) continue;
@@ -62,8 +63,8 @@ public class JsonParser {
     }
 	
 	public static void parseTags(MinecraftServer server) {
-		Map<JType, List<ResourceLocation>> removals = new HashMap<>();
-		Map<JType, Map<ResourceLocation, JsonObject>> additions = new HashMap<>();
+		Map<JType, List<ResourceLocation>> removals = new ConcurrentHashMap<>();
+		Map<JType, Map<ResourceLocation, JsonObject>> additions = new ConcurrentHashMap<>();
 		//iterate through map and locate tags
 		for (Map.Entry<JType, Map<ResourceLocation, JsonObject>> src : ReqChecker.src.entrySet()) {
     		for (Map.Entry<ResourceLocation, JsonObject> map : src.getValue().entrySet()) {
@@ -72,7 +73,7 @@ public class JsonParser {
     				ResourceLocation res = new ResourceLocation(map.getKey().getNamespace().replace(JsonParser.TAGFLAG, ""), map.getKey().getPath());
     				List<Item> members = server.getTags().getItems().getTagOrEmpty(res).getValues();
     				for (int i = 0; i < members.size(); i++) {
-    					additions.computeIfAbsent(src.getKey(), (a) -> new HashMap<>()).put(members.get(i).getRegistryName(), jsonHolder);
+    					additions.computeIfAbsent(src.getKey(), (a) -> new ConcurrentHashMap<>()).put(members.get(i).getRegistryName(), jsonHolder);
     				}
     				removals.computeIfAbsent(src.getKey(), (a) -> new ArrayList<>()).add(map.getKey());
     			}

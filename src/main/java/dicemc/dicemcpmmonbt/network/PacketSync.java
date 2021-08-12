@@ -1,13 +1,14 @@
 package dicemc.dicemcpmmonbt.network;
 
 import java.nio.charset.Charset;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+import dicemc.dicemcpmmonbt.PMMONBT;
 import dicemc.dicemcpmmonbt.ReqChecker;
 import harmonised.pmmo.config.JType;
 import net.minecraft.network.PacketBuffer;
@@ -19,10 +20,10 @@ public class PacketSync {
 	
 	public PacketSync(PacketBuffer buf) {
 		Gson gson = new Gson();
-		src = new HashMap<>();
+		src = new ConcurrentHashMap<>();
 		int len = buf.readInt();
 		for (int i = 0; i < len; i++) {
-			Map<ResourceLocation, JsonObject> valMap = new HashMap<>();
+			Map<ResourceLocation, JsonObject> valMap = new ConcurrentHashMap<>();
 			JType type = JType.values()[buf.readInt()];
 			int l = buf.readInt();
 			for (int j = 0; j < l; j++) {
@@ -57,7 +58,16 @@ public class PacketSync {
  	
 	public boolean handle(Supplier<NetworkEvent.Context> ctx) {
 		ctx.get().enqueueWork(() -> {
-			ReqChecker.src = this.src;
+			System.out.println("Client Updated");
+			ReqChecker.src.putAll(this.src);
+			PMMONBT.registerLogic();
+			for (Map.Entry<JType, Map<ResourceLocation, JsonObject>> s : ReqChecker.src.entrySet()) {
+				System.out.println("JType="+s.getKey().toString());
+				for (Map.Entry<ResourceLocation, JsonObject> i : s.getValue().entrySet()) {
+					System.out.println("   "+i.getKey().toString()+":"+i.getValue().toString().substring(0, i.getValue().toString().length() > 2000 ? 2000 : i.getValue().toString().length()));
+							//+":"+i.getValue().toString().substring(0, i.getValue().toString().length() > 2000 ? 2000 : i.getValue().toString().length()));
+				}
+			}
 		});
 		return true;
 	}

@@ -2,6 +2,7 @@ package dicemc.dicemcpmmonbt;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.logging.log4j.Logger;
 
@@ -19,7 +20,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 
 public class ReqChecker {
-	public static Map<JType, Map<ResourceLocation, JsonObject>> src = new HashMap<>();
+	public static Map<JType, Map<ResourceLocation, JsonObject>> src = new ConcurrentHashMap<>();
 	
 	public static void setValues(JType jtype, Map<ResourceLocation, JsonObject> values) {
 		src.put(jtype, values);
@@ -67,7 +68,7 @@ public class ReqChecker {
 		if (nbt == null) return new HashMap<>();
 		JsonObject ref = src.get(jType).getOrDefault(stack.getItem().getRegistryName(), new JsonObject());
 		if (jType.equals(JType.REQ_BREAK) && ref.get("item") != null) {ref = ref.get("item").getAsJsonObject();}		
-		if (ref.get("logic") == null) {return new HashMap<>();}
+		if (ref.get("logic") == null) {return new ConcurrentHashMap<>();}
 		JsonArray values = ref.get("logic").getAsJsonArray();
 		JsonObject globals = src.get(jType).getOrDefault(new ResourceLocation("global"), new JsonObject());
 		return EvaluationHandler.evaluateEntries(values, nbt, globals);
@@ -77,7 +78,7 @@ public class ReqChecker {
 		CompoundNBT nbt = tile.serializeNBT();
 		JsonObject ref = src.get(jType).getOrDefault(tile.getBlockState().getBlock().getRegistryName(), new JsonObject());
 		if (jType.equals(JType.REQ_BREAK) && ref.get("tile") != null) {ref = ref.get("tile").getAsJsonObject();}
-		if (ref.get("logic") == null) {return new HashMap<>();}
+		if (ref.get("logic") == null) {return new ConcurrentHashMap<>();}
 		JsonArray values = ref.get("logic").getAsJsonArray();		
 		JsonObject globals = src.get(jType).getOrDefault(new ResourceLocation("global"), new JsonObject());
 		return EvaluationHandler.evaluateEntries(values, nbt, globals);
@@ -86,7 +87,7 @@ public class ReqChecker {
 	public static Map<String, Double> getNBTReqs(JType jType, Entity entity) {
 		CompoundNBT nbt = entity.serializeNBT();
 		JsonObject ref = src.get(jType).getOrDefault(entity.getType().getRegistryName(), new JsonObject());
-		if (ref.get("logic") == null) {return new HashMap<>();}
+		if (ref.get("logic") == null) {return new ConcurrentHashMap<>();}
 		JsonArray values = ref.get("values").getAsJsonArray();			
 		JsonObject globals = src.get(jType).getOrDefault(new ResourceLocation("global"), new JsonObject());
 		return EvaluationHandler.evaluateEntries(values, nbt, globals);
