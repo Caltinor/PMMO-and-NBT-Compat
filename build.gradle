@@ -75,9 +75,9 @@ minecraft {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.16.5-36.1.32'
-    //compile fg.deobf("curse.maven:pmmo-353935:3380498")
-    implementation fg.deobf('local.maven:Project_MMO:1.16.5-3.60.2')
+    minecraft 'net.minecraftforge:forge:1.16.5-36.2.8'
+    implementation fg.deobf("curse.maven:pmmo-353935:3449316")
+    //implementation fg.deobf('local.maven:Project_MMO:1.16.5-3.60.2')
     
     //testing inclusions
     runtimeOnly fg.deobf("curse.maven:tinkers-74072:3352983") 

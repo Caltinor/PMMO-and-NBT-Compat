@@ -29,7 +29,6 @@ import dicemc.dicemcpmmonbt.commands.ReloadCommand;
 import dicemc.dicemcpmmonbt.network.Networking;
 import dicemc.dicemcpmmonbt.network.PacketSync;
 import dicemc.dicemcpmmonbt.readers.JsonParser;
-import harmonised.pmmo.ProjectMMOMod;
 import harmonised.pmmo.api.PredicateRegistry;
 import harmonised.pmmo.api.TooltipSupplier;
 import harmonised.pmmo.config.JType;
@@ -149,7 +148,10 @@ public class PMMONBT
     	String fileName;
     	File dataFile;
     	for (int i = JType.REQ_WEAR.getValue(); i < JType.XP_VALUE_GROW.getValue(); i++) {
-    		if (i == JType.REQ_USE_ENCHANTMENT.getValue() || i == JType.XP_VALUE_TRIGGER.getValue() || i == JType.REQ_BIOME.getValue()) 
+    		if (i == JType.REQ_USE_ENCHANTMENT.getValue() 
+    				|| i == JType.XP_VALUE_TRIGGER.getValue() 
+    				|| i == JType.REQ_BIOME.getValue()
+    				|| i == JType.REQ_DIMENSION_TRAVEL.getValue()) 
     			continue;
     		fileName = JType.values()[i].name().toLowerCase() + "_nbt.json";
     		dataFile = FMLPaths.CONFIGDIR.get().resolve( "pmmo/" + fileName ).toFile();
@@ -179,10 +181,10 @@ public class PMMONBT
             LOGGER.error( "Could not create template json config!", dataFile.getPath(), e );
         }
 
-        try( InputStream inputStream = ProjectMMOMod.class.getResourceAsStream( "/assets/"+MOD_ID+"/util/" + fileName );
+        try( InputStream inputStream = PMMONBT.class.getResourceAsStream( "/assets/"+MOD_ID+"/util/" + fileName );
              FileOutputStream outputStream = new FileOutputStream( dataFile ); )
         {
-            LOGGER.debug( "Copying over " + fileName + " json config to " + dataFile.getPath(), dataFile.getPath() );
+            LOGGER.info( "Copying over " + fileName + " json config to " + dataFile.getPath(), dataFile.getPath() );
             IOUtils.copy( inputStream, outputStream );
         }
         catch( IOException e )
