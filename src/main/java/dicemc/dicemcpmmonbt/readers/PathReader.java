@@ -5,9 +5,9 @@ import java.util.List;
 
 import com.mojang.brigadier.StringReader;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.ListTag;
 
 public class PathReader {
 	/**This method takes a raw NBT path (as syntactically defined by
@@ -20,7 +20,7 @@ public class PathReader {
 	 * @param nbt the source to be searched
 	 * @return all possible values at path destinations
 	 */	
-	public static List<String> getNBTValues(String path, CompoundNBT nbt) {
+	public static List<String> getNBTValues(String path, CompoundTag nbt) {
 		List<String> nodes = parsePath(path);
 		if (nbt.isEmpty() || nbt == null) return new ArrayList<String>();
 		return evaluateCompound(nodes, nbt);
@@ -43,21 +43,21 @@ public class PathReader {
 		return nodes;
 	}
 	
-	private static List<String> evaluateCompound(List<String> nodes, CompoundNBT nbt) {
+	private static List<String> evaluateCompound(List<String> nodes, CompoundTag nbt) {
 		List<String> list = new ArrayList<>();
 		if (nbt.isEmpty() || nbt == null) return list;
 		String nodeEntry = nodes.get(0);
 		
 		if (isList(nodeEntry)) {	
 			nodes.remove(0);
-			list.addAll(evaluateList(nodes, nodeEntry, (ListNBT) nbt.get(rawNode(nodeEntry))));
+			list.addAll(evaluateList(nodes, nodeEntry, (ListTag) nbt.get(rawNode(nodeEntry))));
 		}
 		else if (isCompound(nodeEntry)) {
 			nodes.remove(0);
 			list.addAll(evaluateCompound(nodes, nbt.getCompound(rawNode(nodeEntry))));
 		}
 		else {
-			INBT value = nbt.get(rawNode(nodeEntry));
+			Tag value = nbt.get(rawNode(nodeEntry));
 			if (value != null)
 				list.add(value.getAsString());
 		}
@@ -65,7 +65,7 @@ public class PathReader {
 		return list;
 	}
 	
-	private static List<String> evaluateList(List<String> nodes, String node, ListNBT lnbt) {		
+	private static List<String> evaluateList(List<String> nodes, String node, ListTag lnbt) {		
 		List<String> list = new ArrayList<>();
 		if (lnbt == null) return list;
 		int index = getListIndex(node);
@@ -73,20 +73,20 @@ public class PathReader {
 		if (index < -1 || index >= lnbt.size()) return list;
 		if (index == -1) {
 			for (int l = 0; l < lnbt.size(); l++) {
-				if (lnbt.get(0) instanceof CompoundNBT) {	
+				if (lnbt.get(0) instanceof CompoundTag) {	
 					list.addAll(evaluateCompound(new ArrayList<>(nodes), lnbt.getCompound(l)));
 				}
-				else if (lnbt.get(0) instanceof ListNBT) {
+				else if (lnbt.get(0) instanceof ListTag) {
 					list.addAll(evaluateList(new ArrayList<>(nodes), getListParameters(nodes.get(0)), lnbt.getList(l)));
 				}
 				else list.add(lnbt.get(l).getAsString());
 			}
 		}
 		else {
-			if (lnbt.get(0) instanceof CompoundNBT) {
+			if (lnbt.get(0) instanceof CompoundTag) {
 				list.addAll(evaluateCompound(nodes, lnbt.getCompound(index)));
 			}
-			else if (lnbt.get(0) instanceof ListNBT) {
+			else if (lnbt.get(0) instanceof ListTag) {
 				list.addAll(evaluateList(nodes, getListParameters(nodes.get(0)), lnbt.getList(index)));
 			}
 			else list.add(lnbt.get(index).getAsString());
@@ -108,14 +108,14 @@ public class PathReader {
 		catch(NumberFormatException e) {return -2;}
 	}
 	
-	private static int getQualifiedIndex(String param, ListNBT lnbt) {
+	private static int getQualifiedIndex(String param, ListTag lnbt) {
 		if (!isCompound(param)) return -2;
-		if (!(lnbt.get(0) instanceof CompoundNBT)) return -2;
+		if (!(lnbt.get(0) instanceof CompoundTag)) return -2;
 		String key = param.substring(param.indexOf("{")+1, param.indexOf(":"));
 		String value = param.substring(param.indexOf(":")+1, param.indexOf("}"));
 		value = rawValue(value);
 		for (int i = 0; i < lnbt.size(); i++) {
-			CompoundNBT element = lnbt.getCompound(i);
+			CompoundTag element = lnbt.getCompound(i);
 			if (element.contains(key) && element.get(key).getAsString().equalsIgnoreCase(value)) return i;
 		}
 		return -2;

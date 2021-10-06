@@ -19,9 +19,13 @@ import com.google.gson.reflect.TypeToken;
 import dicemc.dicemcpmmonbt.PMMONBT;
 import dicemc.dicemcpmmonbt.ReqChecker;
 import harmonised.pmmo.config.JType;
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.tags.SetTag;
+import net.minecraft.tags.StaticTags;
+import net.minecraft.tags.Tag;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fml.loading.FMLPaths;
 
 public class JsonParser {
@@ -71,7 +75,7 @@ public class JsonParser {
     			if (map.getKey().getNamespace().contains(JsonParser.TAGFLAG)) {
     				JsonObject jsonHolder = map.getValue();
     				ResourceLocation res = new ResourceLocation(map.getKey().getNamespace().replace(JsonParser.TAGFLAG, ""), map.getKey().getPath());
-    				List<Item> members = server.getTags().getItems().getTagOrEmpty(res).getValues();
+    				List<Item> members = server.getTags().getOrEmpty(Registry.ITEM_REGISTRY).getAllTags().getOrDefault(res, SetTag.empty()).getValues();
     				for (int i = 0; i < members.size(); i++) {
     					additions.computeIfAbsent(src.getKey(), (a) -> new ConcurrentHashMap<>()).put(members.get(i).getRegistryName(), jsonHolder);
     				}

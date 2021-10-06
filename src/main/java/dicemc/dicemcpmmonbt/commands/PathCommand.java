@@ -8,28 +8,28 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dicemc.dicemcpmmonbt.readers.PathReader;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.TextComponent;
 
-public class PathCommand implements Command<CommandSource>{
+public class PathCommand implements Command<CommandSourceStack>{
 	public static final PathCommand CMD = new PathCommand();
 	
-	public static void register(CommandDispatcher<CommandSource> dispatcher) {
+	public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
 		dispatcher.register(Commands.literal("nbtpath")
 				.then(Commands.argument("path", StringArgumentType.greedyString())
 						.executes(CMD)));
 	}
 
 	@Override
-	public int run(CommandContext<CommandSource> context) throws CommandSyntaxException {
+	public int run(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
 		String path = StringArgumentType.getString(context, "path");
-		CompoundNBT nbt = context.getSource().getPlayerOrException().getMainHandItem().getTag();
+		CompoundTag nbt = context.getSource().getPlayerOrException().getMainHandItem().getTag();
 		if (nbt.isEmpty()) return 0;
 		List<String> output = PathReader.getNBTValues(path, nbt);
 		for (int i = 0; i < output.size(); i++) {
-			context.getSource().sendSuccess(new StringTextComponent(output.get(i)), false);
+			context.getSource().sendSuccess(new TextComponent(output.get(i)), false);
 		}
 		return 0;
 	}

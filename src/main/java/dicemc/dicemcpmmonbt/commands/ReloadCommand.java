@@ -12,27 +12,27 @@ import dicemc.dicemcpmmonbt.ReqChecker;
 import dicemc.dicemcpmmonbt.network.Networking;
 import dicemc.dicemcpmmonbt.network.PacketSync;
 import dicemc.dicemcpmmonbt.readers.JsonParser;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.server.level.ServerPlayer;
 
-public class ReloadCommand implements Command<CommandSource> {
+public class ReloadCommand implements Command<CommandSourceStack> {
 	private static final ReloadCommand CMD = new ReloadCommand();
 	
-	public static void register(CommandDispatcher<CommandSource> dispatcher) {
+	public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
 		dispatcher.register(Commands.literal("nbtreload")
 				.requires((p) -> p.hasPermission(2))
 				.executes(CMD));
 	}
 
 	@Override
-	public int run(CommandContext<CommandSource> context) throws CommandSyntaxException {
+	public int run(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
 		JsonParser.readRawData();
 		JsonParser.parseTags(context.getSource().getServer());
 		PMMONBT.registerLogic();
-		List<ServerPlayerEntity> playerlist = context.getSource().getServer().getPlayerList().getPlayers();
+		List<ServerPlayer> playerlist = context.getSource().getServer().getPlayerList().getPlayers();
 		PacketSync packet = new PacketSync(ReqChecker.src);
-		for (ServerPlayerEntity spe : playerlist) {
+		for (ServerPlayer spe : playerlist) {
 			Networking.sendToClient(packet , spe);
 		}
 		return 0;

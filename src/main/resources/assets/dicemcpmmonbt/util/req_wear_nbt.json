@@ -1,3 +1,6 @@
 {
-	"global":{"paths":{},"constants":{}}
+	"global":{
+		"paths":{},
+		"constants":{}
+	}
 }

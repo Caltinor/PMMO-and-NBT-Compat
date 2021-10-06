@@ -7,12 +7,12 @@ import java.util.Map;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import dicemc.dicemcpmmonbt.Result;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 
 public class EvaluationHandler {
 	
 	//entry point
-	public static Map<String, Double> evaluateEntries(JsonArray logic, CompoundNBT nbt, JsonObject globals) {
+	public static Map<String, Double> evaluateEntries(JsonArray logic, CompoundTag nbt, JsonObject globals) {
 		Map<String, Double> map = new HashMap<>();		
 		try {
 		//cancels evaluation if NBT has no data
@@ -82,7 +82,7 @@ public class EvaluationHandler {
 		
 	}
 	
-	private static List<Result> processCases(JsonArray cases, CompoundNBT nbt, JsonObject globals) {
+	private static List<Result> processCases(JsonArray cases, CompoundTag nbt, JsonObject globals) {
 		List<Result> results = new ArrayList<>();
 		for (int i = 0; i < cases.size(); i++) {
 			JsonObject caseIterant = cases.get(i).getAsJsonObject();

@@ -1,11 +1,11 @@
 package dicemc.dicemcpmmonbt;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
@@ -13,9 +13,9 @@ import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
+import net.minecraftforge.fmlserverevents.FMLServerStartedEvent;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
@@ -76,20 +76,20 @@ public class PMMONBT
     @SuppressWarnings("resource")
 	@SubscribeEvent
     public void onPlayerJoin(PlayerLoggedInEvent event) {
-    	if (!event.getPlayer().getCommandSenderWorld().isClientSide && event.getPlayer() instanceof ServerPlayerEntity)
-    		loginQueue.put((ServerPlayerEntity) event.getPlayer(), System.currentTimeMillis()+15000);
+    	if (!event.getPlayer().getCommandSenderWorld().isClientSide && event.getPlayer() instanceof ServerPlayer)
+    		loginQueue.put((ServerPlayer) event.getPlayer(), System.currentTimeMillis()+15000);
     }
     
-    private Map<ServerPlayerEntity, Long> loginQueue = new ConcurrentHashMap<>();
+    private Map<ServerPlayer, Long> loginQueue = new ConcurrentHashMap<>();
     @SubscribeEvent
     public void onWorldTick(TickEvent.WorldTickEvent event) {
     	if (!event.world.isClientSide) {
-	    	List<ServerPlayerEntity> outQueue = new ArrayList<>();
-	    	for (Map.Entry<ServerPlayerEntity, Long> map : loginQueue.entrySet()) {
+	    	List<ServerPlayer> outQueue = new ArrayList<>();
+	    	for (Map.Entry<ServerPlayer, Long> map : loginQueue.entrySet()) {
 	    		if (map.getValue() < System.currentTimeMillis()) 
 	    			outQueue.add(map.getKey());
 	    	}
-	    	for (ServerPlayerEntity player : outQueue) {
+	    	for (ServerPlayer player : outQueue) {
 	    		System.out.println("sending update packet to client");
 	    		Networking.sendToClient(new PacketSync(ReqChecker.src), player);
 	    		loginQueue.remove(player);
@@ -111,16 +111,16 @@ public class PMMONBT
     			if (jType.equals(JType.REQ_WEAR) || jType.equals(JType.REQ_TOOL) || jType.equals(JType.REQ_WEAPON) ||
     					jType.equals(JType.REQ_USE) || jType.equals(JType.REQ_PLACE) ||	jType.equals(JType.REQ_KILL) || 
     					jType.equals(JType.REQ_CRAFT) || jType.equals(JType.XP_BONUS_WORN) || jType.equals(JType.XP_BONUS_HELD)) {
-	    			Predicate<PlayerEntity> pred = player -> (ReqChecker.checkNBTReq(player, map.getKey(), jType));
+	    			Predicate<Player> pred = player -> (ReqChecker.checkNBTReq(player, map.getKey(), jType));
 	    			PredicateRegistry.registerPredicate(map.getKey(), jType, pred);
 	    			Function<ItemStack, Map<String, Double>> func = stack -> (ReqChecker.getNBTReqs(jType, stack));
 	    			TooltipSupplier.registerTooltipData(map.getKey(), jType, func);
     			}
     			//BREAK TE OBJECT
     			if (jType.equals(JType.REQ_BREAK)) {
-    				BiPredicate<PlayerEntity, TileEntity> pred2 = (player, tile) -> (ReqChecker.checkNBTReq(player, tile, jType));
+    				BiPredicate<Player, BlockEntity> pred2 = (player, tile) -> (ReqChecker.checkNBTReq(player, tile, jType));
     				PredicateRegistry.registerBreakPredicate(map.getKey(), jType, pred2);
-    				Function<TileEntity, Map<String, Double>> func2 = tile -> (ReqChecker.getNBTReqs(jType, tile));
+    				Function<BlockEntity, Map<String, Double>> func2 = tile -> (ReqChecker.getNBTReqs(jType, tile));
         			TooltipSupplier.registerBreakTooltipData(map.getKey(), jType, func2);
     			}
     			//ITEMSTACK OBJECTS
@@ -132,7 +132,7 @@ public class PMMONBT
     			}   
     			//BLOCK/TE OJECTS
     			if (jType.equals(JType.XP_VALUE_BREAK)) {
-    				Function<TileEntity, Map<String, Double>> func2 = tile -> (ReqChecker.getNBTReqs(jType, tile));
+    				Function<BlockEntity, Map<String, Double>> func2 = tile -> (ReqChecker.getNBTReqs(jType, tile));
         			TooltipSupplier.registerBreakTooltipData(map.getKey(), jType, func2);
     			}
     			//ENTITY OBJECTS
@@ -149,7 +149,10 @@ public class PMMONBT
     	String fileName;
     	File dataFile;
     	for (int i = JType.REQ_WEAR.getValue(); i < JType.XP_VALUE_GROW.getValue(); i++) {
-    		if (i == JType.REQ_USE_ENCHANTMENT.getValue() || i == JType.XP_VALUE_TRIGGER.getValue() || i == JType.REQ_BIOME.getValue()) 
+    		if (i == JType.REQ_USE_ENCHANTMENT.getValue() 
+    				|| i == JType.XP_VALUE_TRIGGER.getValue() 
+    				|| i == JType.REQ_BIOME.getValue()
+    				|| i == JType.REQ_DIMENSION_TRAVEL.getValue()) 
     			continue;
     		fileName = JType.values()[i].name().toLowerCase() + "_nbt.json";
     		dataFile = FMLPaths.CONFIGDIR.get().resolve( "pmmo/" + fileName ).toFile();
@@ -179,10 +182,11 @@ public class PMMONBT
             LOGGER.error( "Could not create template json config!", dataFile.getPath(), e );
         }
 
-        try( InputStream inputStream = ProjectMMOMod.class.getResourceAsStream( "/assets/"+MOD_ID+"/util/" + fileName );
+        try( InputStream inputStream = PMMONBT.class.getResourceAsStream( "/assets/"+MOD_ID+"/util/" + fileName );
              FileOutputStream outputStream = new FileOutputStream( dataFile ); )
         {
             LOGGER.debug( "Copying over " + fileName + " json config to " + dataFile.getPath(), dataFile.getPath() );
+            System.out.println(inputStream == null ? "null inputStream for "+fileName : fileName+" inputStream Good");
             IOUtils.copy( inputStream, outputStream );
         }
         catch( IOException e )

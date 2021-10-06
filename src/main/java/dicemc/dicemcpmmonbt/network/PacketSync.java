@@ -11,14 +11,14 @@ import com.google.gson.JsonObject;
 import dicemc.dicemcpmmonbt.PMMONBT;
 import dicemc.dicemcpmmonbt.ReqChecker;
 import harmonised.pmmo.config.JType;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 public class PacketSync {
 	private final  Map<JType, Map<ResourceLocation, JsonObject>> src;
 	
-	public PacketSync(PacketBuffer buf) {
+	public PacketSync(FriendlyByteBuf buf) {
 		Gson gson = new Gson();
 		src = new ConcurrentHashMap<>();
 		int len = buf.readInt();
@@ -41,7 +41,7 @@ public class PacketSync {
 		this.src = src;
 	}
 	
-	public void toBytes(PacketBuffer buf) {
+	public void toBytes(FriendlyByteBuf buf) {
 		int len = src.size();
 		buf.writeInt(len);
 		for (Map.Entry<JType, Map<ResourceLocation, JsonObject>> map : src.entrySet()) {

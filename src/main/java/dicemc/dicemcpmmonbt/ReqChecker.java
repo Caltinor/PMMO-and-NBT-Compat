@@ -12,12 +12,12 @@ import com.google.gson.JsonObject;
 import dicemc.dicemcpmmonbt.readers.EvaluationHandler;
 import harmonised.pmmo.api.APIUtils;
 import harmonised.pmmo.config.JType;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.resources.ResourceLocation;
 
 public class ReqChecker {
 	public static Map<JType, Map<ResourceLocation, JsonObject>> src = new ConcurrentHashMap<>();
@@ -29,14 +29,14 @@ public class ReqChecker {
 		src.get(jtype).put(key, value);
 	}
 		
-	public static boolean checkNBTReq(PlayerEntity player, ResourceLocation res, JType jType) {
+	public static boolean checkNBTReq(Player player, ResourceLocation res, JType jType) {
 		//failsafe code
 		if (!src.containsKey(jType)) return true;
 		if (!src.get(jType).containsKey(res)) return true;
 		
 		//core logic
 		ItemStack stack = player.getMainHandItem();
-		CompoundNBT tag = stack.getTag();
+		CompoundTag tag = stack.getTag();
 		if (tag == null) return true;
 		//XP check returns false if any criteria do not meet, otherwise proceeds to true return
 		for (Map.Entry<String, Double> vals : getNBTReqs(jType, stack).entrySet()) {
@@ -47,12 +47,12 @@ public class ReqChecker {
 		return true;
 	}
 	
-	public static boolean checkNBTReq(PlayerEntity player, TileEntity tile, JType jType) {
+	public static boolean checkNBTReq(Player player, BlockEntity tile, JType jType) {
 		if (!src.containsKey(jType)) return true;
 		if (!src.get(jType).containsKey(tile.getBlockState().getBlock().getRegistryName())) return true;
 
 		//core logic
-		CompoundNBT tag = tile.serializeNBT();
+		CompoundTag tag = tile.serializeNBT();
 		if (tag == null) return true;
 		//XP check returns false if any criteria do not meet, otherwise proceeds to true return
 		for (Map.Entry<String, Double> vals : getNBTReqs(jType, tile).entrySet()) {
@@ -64,7 +64,7 @@ public class ReqChecker {
 	}
 	
 	public static Map<String, Double> getNBTReqs(JType jType, ItemStack stack) {
-		CompoundNBT nbt = stack.getTag();
+		CompoundTag nbt = stack.getTag();
 		if (nbt == null) return new HashMap<>();
 		JsonObject ref = src.get(jType).getOrDefault(stack.getItem().getRegistryName(), new JsonObject());
 		if (jType.equals(JType.REQ_BREAK) && ref.get("item") != null) {ref = ref.get("item").getAsJsonObject();}		
@@ -74,8 +74,8 @@ public class ReqChecker {
 		return EvaluationHandler.evaluateEntries(values, nbt, globals);
 	}
 	
-	public static Map<String, Double> getNBTReqs(JType jType, TileEntity tile) {
-		CompoundNBT nbt = tile.serializeNBT();
+	public static Map<String, Double> getNBTReqs(JType jType, BlockEntity tile) {
+		CompoundTag nbt = tile.serializeNBT();
 		JsonObject ref = src.get(jType).getOrDefault(tile.getBlockState().getBlock().getRegistryName(), new JsonObject());
 		if (jType.equals(JType.REQ_BREAK) && ref.get("tile") != null) {ref = ref.get("tile").getAsJsonObject();}
 		if (ref.get("logic") == null) {return new ConcurrentHashMap<>();}
@@ -85,7 +85,7 @@ public class ReqChecker {
 	}
 	
 	public static Map<String, Double> getNBTReqs(JType jType, Entity entity) {
-		CompoundNBT nbt = entity.serializeNBT();
+		CompoundTag nbt = entity.serializeNBT();
 		JsonObject ref = src.get(jType).getOrDefault(entity.getType().getRegistryName(), new JsonObject());
 		if (ref.get("logic") == null) {return new ConcurrentHashMap<>();}
 		JsonArray values = ref.get("values").getAsJsonArray();			
