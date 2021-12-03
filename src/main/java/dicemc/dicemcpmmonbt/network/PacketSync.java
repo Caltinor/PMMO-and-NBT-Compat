@@ -13,7 +13,7 @@ import dicemc.dicemcpmmonbt.ReqChecker;
 import harmonised.pmmo.config.JType;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.fmllegacy.network.NetworkEvent;
+import net.minecraftforge.network.NetworkEvent;
 
 public class PacketSync {
 	private final  Map<JType, Map<ResourceLocation, JsonObject>> src;

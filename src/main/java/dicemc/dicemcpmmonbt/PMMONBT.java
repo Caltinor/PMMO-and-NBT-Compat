@@ -10,13 +10,12 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
+import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
-import net.minecraftforge.fmlserverevents.FMLServerStartedEvent;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -29,7 +28,6 @@ import dicemc.dicemcpmmonbt.commands.ReloadCommand;
 import dicemc.dicemcpmmonbt.network.Networking;
 import dicemc.dicemcpmmonbt.network.PacketSync;
 import dicemc.dicemcpmmonbt.readers.JsonParser;
-import harmonised.pmmo.ProjectMMOMod;
 import harmonised.pmmo.api.PredicateRegistry;
 import harmonised.pmmo.api.TooltipSupplier;
 import harmonised.pmmo.config.JType;
@@ -98,7 +96,7 @@ public class PMMONBT
     }
     
     @SubscribeEvent
-    public void onServerStart(FMLServerStartedEvent event) {
+    public void onServerStart(ServerStartedEvent event) {
     	JsonParser.parseTags(event.getServer());
     	ReqChecker.printSrc(LOGGER);
     	registerLogic();

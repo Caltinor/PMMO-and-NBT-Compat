@@ -2,9 +2,9 @@ package dicemc.dicemcpmmonbt.network;
 
 import dicemc.dicemcpmmonbt.PMMONBT;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.fmllegacy.network.NetworkDirection;
-import net.minecraftforge.fmllegacy.network.NetworkRegistry;
-import net.minecraftforge.fmllegacy.network.simple.SimpleChannel;
+import net.minecraftforge.network.NetworkDirection;
+import net.minecraftforge.network.NetworkRegistry;
+import net.minecraftforge.network.simple.SimpleChannel;
 import net.minecraft.resources.ResourceLocation;
 
 public class Networking {
