@@ -22,8 +22,6 @@ import harmonised.pmmo.config.JType;
 import net.minecraft.world.item.Item;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tags.SetTag;
-import net.minecraft.tags.StaticTags;
-import net.minecraft.tags.Tag;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fml.loading.FMLPaths;
